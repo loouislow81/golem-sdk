@@ -1,0 +1,106 @@
+{
+  "name": "golem",
+  "version": "1.0.0",
+  "homepage": "https://github.com/loouislow81/golem",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loouislow81/golem.git"
+  },
+  "bin": {
+    "golem": "lib/cli.js"
+  },
+  "bugs": {
+    "url": "https://github.com/loouislow81/golem/issues"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "module:get": "npm i",
+    "module:fix": "npm audit fix --force",
+    "ci": "gulp build test && npm run lint",
+    "clean": "gulp clean",
+    "dev-up": "npm install && (cd ./app && npm install) && npm run build",
+    "dev-up-win": "npm install & cd app & npm install & cd .. & npm run build",
+    "e2e": "gulp test",
+    "jest": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "package-placeholder": "npm run build && node lib/cli.js http://www.bennish.net/web-notifications.html ~/Desktop --overwrite --name notification-test --icon ./test-resources/iconSampleGrey.png --inject ./test-resources/test-injection.js --inject ./test-resources/test-injection.css && open ~/Desktop/notification-test-darwin-x64/notification-test.app",
+    "start-placeholder": "npm run build && electron app",
+    "tdd": "gulp tdd",
+    "test": "jest && gulp test",
+    "watch": "while true ; do gulp watch ; done"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "4.0.0"
+          }
+        }
+      ]
+    ]
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "async": "^2.6.0",
+    "axios": "^0.17.1",
+    "babel-polyfill": "^6.26.0",
+    "cheerio": "^1.0.0-rc.2",
+    "commander": "^2.11.0",
+    "electron-packager": "^12.1.0",
+    "gitcloud": "^0.1.0",
+    "gulp-sourcemap": "^1.0.1",
+    "hasbin": "^1.2.3",
+    "lodash": "^4.17.4",
+    "loglevel": "^1.5.1",
+    "ncp": "^2.0.0",
+    "page-icon": "^0.3.0",
+    "progress": "^2.0.0",
+    "sanitize-filename": "^1.6.1",
+    "shelljs": "^0.7.8",
+    "source-map-support": "^0.5.0",
+    "tmp": "0.0.33",
+    "validator": "^9.1.1"
+  },
+  "deprecated": false,
+  "description": "Wrap web apps natively",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^21.2.0",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "del": "^3.0.0",
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-istanbul": "^1.1.3",
+    "gulp-mocha": "^6.0.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "isparta": "^4.1.0",
+    "jest": "^21.2.1",
+    "regenerator-runtime": "^0.11.1",
+    "require-dir": "^0.3.2",
+    "run-sequence": "^2.2.1",
+    "webpack-stream": "^4.0.3"
+  },
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "jest": {
+    "testMatch": [
+      "**/src/**/?(*.)(spec|test).js?(x)"
+    ]
+  }
+}

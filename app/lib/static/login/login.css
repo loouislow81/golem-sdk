@@ -1,0 +1,67 @@
+label, input {
+	display: block;
+}
+
+* {
+	font-family: Verdana, sans-serif;
+}
+
+html, body {
+	-webkit-app-region: drag;
+	margin: 0;
+	height: 100%;
+}
+
+html, html a {
+	-webkit-font-smoothing: antialiased;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.login-form>div {
+	margin-bottom: 30px;
+}
+
+.login-form>div>label {
+	margin-bottom: 25px;
+	color: rgba(0, 0, 0, 0.7);
+	font-size: 18px;
+	font-weight: 100;
+	letter-spacing: 5px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.login-form>div>input {
+	-webkit-app-region: no-drag;
+	border: 2px solid #929292;
+	border-radius: 30px;
+	padding: 5px 15px 5px 15px;
+	width: 225px;
+	height: 30px;
+	font-size: 18px;
+}
+
+.login-form>div>button {
+  -webkit-app-region: no-drag;
+	border: 0;
+  border-radius: 30px;
+  background-color: #414e54;
+  width: 255px;
+  height: 44px;
+  color: white;
+  font-size: 15px;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+button:hover {
+	background-color: #0D47A1;
+}
