@@ -189,7 +189,7 @@ Specifies if the destination directory should be not overwritten, defaults to fa
 -c, --conceal
 ```
 
-Specifies if the source code within the nativefied app should be packaged into an archive, defaults to false, [read more](http://electron.atom.io/docs/v0.36.0/tutorial/application-packaging/).
+Specifies if the source code within the Golem app should be packaged into an archive, defaults to false, [read more](http://electron.atom.io/docs/v0.36.0/tutorial/application-packaging/).
 
 #### [icon]
 
@@ -382,7 +382,7 @@ golem https://google.com --internal-urls ".*?\.google\.*?"
 --flash
 ```
 
-If `--flash` is specified, Golem will automatically try to determine the location of your Google Chrome flash binary. Take note that the version of Chrome on your computer should be the same as the version used by the version of Electron for the Nativefied package.
+If `--flash` is specified, Golem will automatically try to determine the location of your Google Chrome flash binary. Take note that the version of Chrome on your computer should be the same as the version used by the version of Electron for the Golem package.
 
 Take note that if this flag is specified, the `--insecure` flag will be added automatically, to prevent the Mixed Content errors on sites such as [Twitch.tv](https://www.twitch.tv/).
 
@@ -603,7 +603,7 @@ golem(options, function(error, appPath) {
         console.error(error)
         return
     }
-    console.log('App has been nativefied to', appPath)
+    console.log('App has been generated to', appPath)
 })
 ```
 
