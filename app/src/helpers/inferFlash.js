@@ -3,7 +3,7 @@ import path from 'path';
 import helpers from './helpers';
 
 const { isOSX, isWindows, isLinux } = helpers;
-
+const log = require('loglevel');
 /**
  * Synchronously find a file or directory
  * @param {RegExp} pattern regex
@@ -35,19 +35,19 @@ function findSync(pattern, basePath, findDir) {
           return;
         }
         findSyncRecurse(childPath);
-        return;
+        return
       }
 
       if (!findDir) {
         matches.push(childPath);
-        return;
+        return
       }
 
       if (childIsDirectory) {
         matches.push(childPath);
       }
     });
-  }(basePath));
+  })(basePath);
   return matches;
 }
 
@@ -56,11 +56,18 @@ function linuxMatch() {
 }
 
 function windowsMatch() {
-  return findSync(/pepflashplayer\.dll/, 'C:\\Program Files (x86)\\Google\\Chrome')[0];
+  return findSync(
+    /pepflashplayer\.dll/,
+    'C:\\Program Files (x86)\\Google\\Chrome',
+  )[0];
 }
 
 function darwinMatch() {
-  return findSync(/PepperFlashPlayer.plugin/, '/Applications/Google Chrome.app/', true)[0];
+  return findSync(
+    /PepperFlashPlayer.plugin/,
+    '/Applications/Google Chrome.app/',
+    true,
+  )[0];
 }
 
 function inferFlash() {
@@ -76,7 +83,7 @@ function inferFlash() {
     return linuxMatch();
   }
 
-  console.warn('Unable to determine OS to infer flash player');
+  log.warn('Unable to determine OS to infer flash player');
   return null;
 }
 export default inferFlash;

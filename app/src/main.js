@@ -12,16 +12,17 @@ import inferFlash from './helpers/inferFlash';
 
 const { isOSX } = helpers;
 
-electronDownload();
-
 const APP_ARGS_FILE_PATH = path.join(__dirname, '..', 'golem.json');
 const appArgs = JSON.parse(fs.readFileSync(APP_ARGS_FILE_PATH, 'utf8'));
+
+const fileDownloadOptions = Object.assign({}, appArgs.fileDownloadOptions);
+electronDownload(fileDownloadOptions);
 
 if (appArgs.processEnvs) {
   Object.keys(appArgs.processEnvs).forEach((key) => {
     /* eslint-env node */
     process.env[key] = appArgs.processEnvs[key];
-  });
+  })
 }
 
 let mainWindow;
@@ -37,6 +38,10 @@ if (appArgs.ignoreCertificate) {
   app.commandLine.appendSwitch('ignore-certificate-errors');
 }
 
+if (appArgs.disableGpu) {
+  app.disableHardwareAcceleration();
+}
+
 if (appArgs.ignoreGpuBlacklist) {
   app.commandLine.appendSwitch('ignore-gpu-blacklist');
 }
@@ -50,18 +55,30 @@ if (appArgs.diskCacheSize) {
 }
 
 if (appArgs.basicAuthUsername) {
-  app.commandLine.appendSwitch('basic-auth-username', appArgs.basicAuthUsername);
+  app.commandLine.appendSwitch(
+    'basic-auth-username',
+    appArgs.basicAuthUsername,
+  );
 }
 
 if (appArgs.basicAuthPassword) {
-  app.commandLine.appendSwitch('basic-auth-password', appArgs.basicAuthPassword);
+  app.commandLine.appendSwitch(
+    'basic-auth-password',
+    appArgs.basicAuthPassword,
+  );
 }
 
 // do nothing for setDockBadge if not OSX
 let setDockBadge = () => {};
 
 if (isOSX()) {
-  setDockBadge = app.dock.setBadge;
+  let currentBadgeCount = 0;
+
+  setDockBadge = (count, bounce = false) => {
+    app.dock.setBadge(count);
+    if (bounce && count > currentBadgeCount) app.dock.bounce();
+    currentBadgeCount = count;
+  }
 }
 
 app.on('window-all-closed', () => {
@@ -97,21 +114,28 @@ if (appArgs.crashReporter) {
       companyName: appArgs.companyName || '',
       productName: appArgs.name,
       submitURL: appArgs.crashReporter,
-      autoSubmit: true,
+      uploadToServer: true,
     });
-  });
+  })
 }
 
 app.on('ready', () => {
   mainWindow = createMainWindow(appArgs, app.quit, setDockBadge);
   createTrayIcon(appArgs, mainWindow);
-});
+})
+
+app.on('new-window-for-tab', () => {
+  mainWindow.emit('new-tab');
+})
 
 app.on('login', (event, webContents, request, authInfo, callback) => {
   // for http authentication
   event.preventDefault();
 
-  if (appArgs.basicAuthUsername !== null && appArgs.basicAuthPassword !== null) {
+  if (
+    appArgs.basicAuthUsername !== null &&
+    appArgs.basicAuthPassword !== null
+  ) {
     callback(appArgs.basicAuthUsername, appArgs.basicAuthPassword);
   } else {
     createLoginWindow(callback);
@@ -122,7 +146,12 @@ if (appArgs.singleInstance) {
   const shouldQuit = app.makeSingleInstance(() => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
+      if (!mainWindow.isVisible()) {
+        // tray
+        mainWindow.show();
+      }
       if (mainWindow.isMinimized()) {
+        // minimized
         mainWindow.restore();
       }
       mainWindow.focus();

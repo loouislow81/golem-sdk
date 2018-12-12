@@ -1,14 +1,16 @@
-# golem
+# golem-sdk 2.x.x
 
-SDK for [GOLEM CLI](https://github.com/loouislow81/golem-cli) and [GOLEM App Store](https://github.com/loouislow81/golem-apps)
+SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.
 
-## Prebuild Apps
+- [golem-cli](https://github.com/loouislow81/golem-cli) GOLEM app manager for Terminal.
+- [golem-sdk](https://github.com/loouislow81/golem-sdk) SDK to build linux desktop apps.
+- [golem-mock-server](https://github.com/loouislow81/golem-sdk) testing and simulate app server.
+- [golem-apps](https://github.com/loouislow81/golem-apps) temporary hosted GOLEM app library.
+- [golem-store](https://github.com/loouislow81/golem-store) graphical web interface for app library.
 
-Download prebuild Golem Apps, [here](https://github.com/loouislow81/golem-apps).
+### prerequisites
 
-## Prerequisites
-
-We need NodeJS runtime,
+we need NodeJS runtime,
 
 ```bash
 $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -17,7 +19,7 @@ $ sudo npm i -g n
 $ sudo n stable
 ```
 
-And other packages,
+other dependencies,
 
 ```bash
 $ sudo apt install -y wine imagemagick
@@ -25,13 +27,13 @@ $ sudo apt install -y wine imagemagick
 
 ---
 
-## Flash Plugin
+### flash Plugin
 
 ```bash
 $ sudo apt install -y pepperflashplugin-nonfree browser-plugin-freshplayer-pepperflash
 ```
 
-To configure GOLEM to use **flash** plugin, edit your created app file located in `/<app_name>/resources/app/golem.json`
+to configure the GOLEM app to use **flash** plugin, edit your created app file located in `/<app_name>/resources/app/golem.json`
 
 Use text editor to replace or add the following line,
 
@@ -41,641 +43,239 @@ Use text editor to replace or add the following line,
 
 ---
 
-## Docker
+### usage
 
-To create GOLEM container,
+clone the repository,
 
 ```bash
-$ sudo docker build .
+$ git clone https://github.com/loouislow81/golem-sdk.git
 ```
 
----
-
-## Usage
-
-Clone the repository,
+set things up,
 
 ```bash
-$ git clone https://github.com/loouislow81/golem.git
-```
-
-Set things up,
-
-```bash
-$ cd golem
+$ cd golem-sdk
 $ npm i
+$ npm run build
 ```
 
-The Golem CLI,
+example of usage,
 
 ```bash
-$ node lib/cli.js -h
-```
-
-Example of usage,
-
-```bash
-$ cd golem
+$ cd golem-sdk
 $ node lib/cli.js --name duckduckgo --icon icon.png --platform linux --arch x64 --show-menu-bar --disk-cache-size 500000000 "https://duckduckgo.com"
+```
+
+to configure and run globally,
+
+```bash
+$ npm link
+```
+
+then you can use,
+
+```bash
+$ golem-sdk --name duckduckgo --icon icon.png --platform linux --arch x64 --show-menu-bar --disk-cache-size 500000000 "https://duckduckgo.com"
 ```
 
 **Note:** App that created with Golem, the app settings file is located in `/<app_name>/resources/app/golem.json`. You can change any parameters in this `golem.json` file. Read below **API** and learn how to configure your app behaviour.
 
 ---
 
-# API
 
-## Command Line
+### cli
+
+to run SDK in Terminal,
 
 ```bash
-golem [options] <targetUrl> [dest]
+$ node lib/cli.js -h
 ```
-Command line options are listed below.
-
-#### Target Url
-
-The url to point the application at.
-
-#### [dest]
-
-Specifies the destination directory to build the app to, defaults to the current working directory.
-
-#### Help
-
-```
--h, --help
-```
-
-Prints the usage information.
-
-#### Version
-
-```
--V, --version
-```
-
-Prints the version of your `golem` install.
-
-#### [name]
-
-```
--n, --name <value>
-```
-
-The name of the application, which will affect strings in titles and the icon.
-
-**For Linux Users:** Do not put spaces if you define the app name yourself with `--name`, as this will cause problems (tested on Ubuntu 14.04) when pinning a packaged app to the launcher.
-
-#### [platform]
-
-```
--p, --platform <value>
-```
-Automatically determined based on the current OS. Can be overwritten by specifying either `linux`, `windows`, `osx` or `mas` for a Mac App Store specific build.
-
-The alternative values `win32` (for Windows) or `darwin`, `mac` (for macOS) can also be used.
-
-#### [arch]
-
-```
--a, --arch <value>
-```
-
-Processor architecture, automatically determined based on the current OS. Can be overwritten by specifying either `ia32`, `x64` or `armv7l`.
-
-#### [app-copyright]
-
-```
---app-copyright <value>
-```
-
-The human-readable copyright line for the app. Maps to the `LegalCopyright` metadata property on Windows, and `NSHumanReadableCopyright` on OS X.
-
-#### [app-version]
-
-```
---app-version <value>
-```
-
-The release version of the application. By default the `version` property in the `package.json` is used but it can be overridden with this argument. If neither are provided, the version of Electron will be used. Maps to the `ProductVersion` metadata property on Windows, and `CFBundleShortVersionString` on OS X.
-
-#### [build-version]
-
-```
---build-version <value>
-```
-
-The build version of the application. Maps to the `FileVersion` metadata property on Windows, and `CFBundleVersion` on OS X.
-
-#### [electron-version]
-
-```
--e, --electron-version <value>
-```
-
-Electron version without the `v`, see https://github.com/atom/electron/releases.
-
-#### [no-overwrite]
-
-```
---no-overwrite
-```
-
-Specifies if the destination directory should be not overwritten, defaults to false.
-
-#### [conceal]
-
-```
--c, --conceal
-```
-
-Specifies if the source code within the Golem app should be packaged into an archive, defaults to false, [read more](http://electron.atom.io/docs/v0.36.0/tutorial/application-packaging/).
-
-#### [icon]
-
-```
--i, --icon <path>
-```
-
-##### Packaging for Windows and Linux
-
-The icon parameter should be a path to a `.png` file.
-
-##### Packaging for macOS
-
-The icon parameter can either be a `.icns` or a `.png` file if the [optional dependencies](../README.md#optional-dependencies) are installed.
-
-If you have the optional dependencies `iconutil`, Imagemagick `convert`, and Imagemagick `identify` in your `PATH`, Golem will automatically convert the `.png` to a `.icns` for you.
-
-###### Manually Converting `.icns`
-
-[iConvertIcons](https://iconverticons.com/online/) can be used to convert `.pngs`, though it can be quite cumbersome.
-
-To retrieve the `.icns` file from the downloaded file, extract it first and press File > Get Info. Then select the icon in the top left corner of the info window and press `⌘-C`. Open Preview and press File > New from clipboard and save the `.icns` file. It took me a while to figure out how to do that and question why a `.icns` file was not simply provided in the downloaded archive.
-
-#### [counter]
-
-```
---counter
-```
-
-Use a counter that persists even with window focus for the application badge for sites that use an "(X)" format counter in the page title (i.e. Gmail).  Same limitations as the badge option (above).
-
-#### [bounce]
-
-```
---bounce
-```
-
-(macOS only) When the the counter increases, the dock icon will bounce for one second. This only works if the `--counter` option is active.
-
-#### [width]
-
-```
---width <value>
-```
-
-Width of the packaged application, defaults to `1280px`.
-
-#### [height]
-
-```
---height <value>
-```
-
-Height of the packaged application, defaults to `800px`.
-
-#### [min-width]
-
-```
---min-width <value>
-```
-
-Minimum width of the packaged application, defaults to `0`.
-
-#### [min-height]
-
-```
---min-height <value>
-```
-
-Minimum height of the packaged application, defaults to `0`.
-
-#### [max-width]
-
-```
---max-width <value>
-```
-
-Maximum width of the packaged application, default is no limit.
-
-#### [max-height]
-
-```
---max-height <value>
-```
-
-Maximum height of the packaged application, default is no limit.
-
-#### [x]
-
-```
---x <value>
-```
-
-X location of the packaged application window.
-
-#### [y]
-
-```
---y <value>
-```
-
-Y location of the packaged application window.
-
-#### [show-menu-bar]
-
-```
--m, --show-menu-bar
-```
-
-Specifies if the menu bar should be shown.
-
-#### [fast-quit]
-
-```
--f, --fast-quit
-```
-
-(macOS only) Specifies to quit the app after closing all windows, defaults to false.
-
-#### [user-agent]
-
-```
--u, --user-agent <value>
-```
-
-Set the user agent to run the created app with.
-
-#### [honest]
-
-```
---honest
-```
-By default, Golem uses a preset user agent string for your OS and masquerades as a regular Google Chrome browser, so that sites like WhatsApp Web will not say that the current browser is unsupported.
-
-If this flag is passed, it will not override the user agent.
-
-#### [ignore-certificate]
-
-```
---ignore-certificate
-```
-Forces the packaged app to ignore certificate errors.
-
-#### [disable-gpu]
-
-```
---disable-gpu
-```
-Disable hardware acceleration for the packaged application.
-
-#### [ignore-gpu-blacklist]
-
-```
---ignore-gpu-blacklist
-```
-Passes the ignore-gpu-blacklist flag to the Chrome engine, to allow for WebGl apps to work on non supported graphics cards.
-
-#### [enable-es3-apis]
-
-```
---enable-es3-apis
-```
-Passes the enable-es3-apis flag to the Chrome engine, to force the activation of WebGl 2.0.
-
-
-#### [insecure]
-
-```
---insecure
-```
-Forces the packaged app to ignore web security errors, such as [Mixed Content](https://developer.mozilla.org/en-US/docs/Security/Mixed_content) errors when receiving HTTP content on a HTTPS site.
-
-
-#### [internal-urls]
-
-```
---internal-urls <regex>
-```
-Regular expression of URLs to consider "internal"; all other URLs will be opened in an external browser. Defaults to URLs on same second-level domain as app.
-
-Example:
 
 ```bash
-golem https://google.com --internal-urls ".*?\.google\.*?"
+golem-sdk [options] <targetURL> [dest]
 ```
-
-#### [flash]
-
-```
---flash
-```
-
-If `--flash` is specified, Golem will automatically try to determine the location of your Google Chrome flash binary. Take note that the version of Chrome on your computer should be the same as the version used by the version of Electron for the Golem package.
-
-Take note that if this flag is specified, the `--insecure` flag will be added automatically, to prevent the Mixed Content errors on sites such as [Twitch.tv](https://www.twitch.tv/).
-
-#### [flash-path]
-
-```
---flash-path <value>
-```
-
-You can also specify the path to the Chrome flash plugin directly with this flag. The path can be found at [chrome://plugins](chrome://plugins), under `Adobe Flash Player` > `Location`. This flag automatically enables the `--flash` flag as well.
-
-#### [disk-cache-size]
-
-```
---disk-cache-size <value>
-```
-Forces the maximum disk space to be used by the disk cache. Value is given in bytes.
-
-#### [inject]
-
-```
---inject <value>
-```
-
-Allows you to inject a javascript or css file. This command can be run multiple times to inject the files.
-
-Example:
-
-```bash
-golem http://google.com --inject ./some-js-injection.js --inject ./some-css-injection.css ~/Desktop
-```
-
-#### [full-screen]
-
-```
---full-screen
-```
-
-Makes the packaged app start in full screen.
-
-
-#### [maximize]
-
-```
---maximize
-```
-
-Makes the packaged app start maximized.
-
-
-#### [hide-window-frame]
-
-```
---hide-window-frame
-```
-
-Disable window frame and controls
-
-
-#### [verbose]
-
-```
---verbose
-```
-
-Shows detailed logs in the console.
-
-#### [disable-context-menu]
-
-```
---disable-context-menu
-```
-
-Disable the context menu
-
-#### [disable-dev-tools]
-
-```
---disable-dev-tools
-```
-
-Disable the Chrome developer tools
-
-#### [crash-reporter]
-
-```
---crash-reporter <value>
-```
-
-Enables crash reporting and set the URL to submit crash reports to
-
-Example:
-
-```bash
-golem http://google.com --crash-reporter https://electron-crash-reporter.appspot.com/PROJECT_ID/create/
-```
-
-#### [zoom]
-
-```
---zoom <value>
-```
-
-Sets a default zoom factor to be used when the app is opened, defaults to `1.0`.
-
-#### [single-instance]
-
-```
---single-instance
-```
-
-Prevents application from being run multiple times. If such an attempt occurs the already running instance is brought to front.
-
-#### [tray]
-
-```
---tray
-```
-
-Application will stay as an icon in the system tray. Prevents application from being closed from clicking the window close button.
-
-#### [basic-auth-username]
-
-```
---basic-auth-username <value> --basic-auth-password <value>
-```
-
-Set basic http(s) auth via the command line to have the app automatically log you in to a protected site. Both fields are required if one is set.
-
-
-#### [processEnvs]
-
-```
---processEnvs <json-string>
-```
-
-a JSON string of key/value pairs to be set as environment variables before any browser windows are opened.
-
-Example:
-
-```bash
-golem <your-geolocation-enabled-website> --processEnvs '{"GOOGLE_API_KEY": "<your-google-api-key>"}'
-```
-
-#### [file-download-options]
-
-```
---file-download-options <json-string>
-```
-
-a JSON string of key/value pairs to be set as file download options.  See [electron-dl](https://github.com/sindresorhus/electron-dl) for available options.
-
-Example:
-
-```bash
-golem <your-website> --file-download-options '{"saveAs": true}'
-```
-
-#### [always-on-top]
-
-```
---always-on-top
-```
-
-Enable always on top for the packaged application.
-
-
-
-## Programmatic API
-
-You can use the Golem programmatic API as well.
-
-```bash
-# install and save to package.json
-npm install --save golem
-```
-
-In your `.js` file:
-
-```javascript
-const golem = require('golem').default
-
-// possible options, defaults unless specified otherwise
-var options = {
-    name: 'DuckDuckGo', // will be inferred if not specified
-    targetUrl: 'https://duckduckgo.com', // required
-    platform: 'linux', // defaults to the current system
-    arch: 'x64', // defaults to the current system
-    version: '0.36.4',
-    out: '.',
-    overwrite: false,
-    asar: false, // see conceal
-    icon: 'icon.png',
-    counter: false,
-    bounce: false,
-    width: 1280,
-    height: 800,
-    showMenuBar: false,
-    fastQuit: false,
-    userAgent: 'Mozilla ...', // will infer a default for your current system
-    ignoreCertificate: false,
-    ignoreGpuBlacklist: false,
-    enableEs3Apis: false,
-    insecure: false,
-    honest: false,
-    zoom: 1.0,
-    singleInstance: false,
-    fileDownloadOptions: {
-      saveAs: true // always show "Save As" dialog
-    },
-    processEnvs: {
-      "GOOGLE_API_KEY": "<your-google-api-key>"
-    }
-}
-
-golem(options, function(error, appPath) {
-    if (error) {
-        console.error(error)
-        return
-    }
-    console.log('App has been generated to', appPath)
-})
-```
-
-### Addition packaging options for Windows
-
-#### [version-string]
-
-*Object* (**deprecated** as removed in `electron-packager` 9.0.0, please use the
-[`win32metadata`](#win32metadata) parameter instead)
-
-#### [win32metadata]
-
-```
---win32metadata <json-string>
-```
-
-a JSON string of key/value pairs of application metadata (ProductName, InternalName, FileDescription) to embed into the executable (Windows only).
-
-Example:
-
-```bash
-golem <your-geolocation-enabled-website> --win32metadata '{"ProductName": "Your Product Name", "InternalName", "Your Internal Name", "FileDescription": "Your File Description"}'
-```
-
-##### Programmatic API
-
-*Object*
-
-Object (also known as a "hash") of application metadata to embed into the executable:
-- `CompanyName`
-- `FileDescription`
-- `OriginalFilename`
-- `ProductName`
-- `InternalName`
-
-_(Note that `win32metadata` was added to `electron-packager` in version 8.0.0)_
-
-In your `.js` file:
-
-```javascript
-var options = {
-    ...
-    win32metadata: {
-      CompanyName: 'Your Company Name',
-      FileDescription: 'Your File Description',
-      OriginalFilename: 'Your Original Filename',
-      ProductName: 'Your Product Name',
-      InternalName: 'Your Internal Name'
-    }
-};
-```
+command line options are listed below,
+
+flags | explain
+----- | -------
+_targetURL_ | URL to point the application at.
+_dest_| Specifies the destination directory to build the app to, defaults to the current working directory.
+_-h, --help_ | Prints the usage information.
+_-v, --version_ | Prints the version of your `golem-sdk` install.
+
+### api
+
+#### _commands
+
+flags | explain | status
+----- | ------- | ------
+_-n, --name (value)_ | The name of the application, which will affect strings in titles and the icon. **For Linux Users:** Do not put spaces if you define the app name yourself with `--name`, as this will cause problems (tested on Ubuntu 14.04) when pinning a packaged app to the launcher. | OK
+_-p, --platform_ (value) | Automatically determined based on the current OS. Can be overwritten by specifying either `linux`, `windows`, `osx` or `mas` for a Mac App Store specific build. The alternative values `win32` (for Windows) or `darwin`, `mac` (for macOS) can also be used. | OK
+_-a, --arch (value)_ | Processor architecture, automatically determined based on the current OS. Can be overwritten by specifying either `ia32`, `x64` or `armv7l`. | OK
+_--app-copyright (value)_ | The human-readable copyright line for the app. Maps to the `LegalCopyright` metadata property on Windows, and `NSHumanReadableCopyright` on OSX. | OK
+_--app-version (value)_ | The release version of the application. By default the `version` property in the `package.json` is used but it can be overridden with this argument. If neither are provided, the version of Electron will be used. Maps to the `ProductVersion` metadata property on Windows, and `CFBundleShortVersionString` on OSX. | OK
+_--build-version (value)_ | The build version of the application. Maps to the `FileVersion` metadata property on Windows, and `CFBundleVersion` on OS X. | OK
+_-e, --electron-version (value)_ | Electron version without the `v`, see https://github.com/atom/electron/releases. | OK
+_--no-overwrite_ | Specifies if the destination directory should be not overwritten, defaults to false. | OK
+_-c, --conceal_ | Specifies if the source code within the Golem app should be packaged into an archive, defaults to false, [read more](http://electron.atom.io/docs/v0.36.0/tutorial/application-packaging/). | OK
+_-i, --icon (path)_ | The icon parameter should be a path to a `.png` file. | OK
+_--counter_ | Use a counter that persists even with window focus for the application badge for sites that use an "(X)" format counter in the page title (i.e. Gmail).  Same limitations as the badge option (above). | OK
+_--bounce_ | (macOS only) When the the counter increases, the dock icon will bounce for one second. This only works if the `--counter` option is active. | OK
+_--width (value)_ | Width of the packaged application, defaults to `1280px`. | OK
+_--height (value)_ | Height of the packaged application, defaults to `800px`. | OK
+_--min-width (value)_ | Minimum width of the packaged application, defaults to `0`. | OK
+_--min-height (value)_ | Minimum height of the packaged application, defaults to `0`. | OK
+_--max-width (value)_ | Maximum width of the packaged application, default is no limit. | OK
+_--max-height (value)_ | Maximum height of the packaged application, default is no limit. | OK
+_--x (value)_ | **X** location of the packaged application window. | OK
+_--y (value)_ | **Y** location of the packaged application window. | OK
+_-m, --show-menu-bar_ | Specifies if the menu bar should be shown. | OK
+_-f, --fast-quit_ | (macOS only) Specifies to quit the app after closing all windows, defaults to false. | OK
+_-u, --user-agent (value)_ | Set the user agent to run the created app with. | OK
+_--honest_ | By default, Golem uses a preset user agent string for your OS and masquerades as a regular Google Chrome browser, so that sites like WhatsApp Web will not say that the current browser is unsupported. If this flag is passed, it will not override the user agent. | OK
+_--ignore-certificate_ | Forces the packaged app to ignore certificate errors. | OK
+_--disable-gpu_ | Disable hardware acceleration for the packaged application. | OK
+_--ignore-gpu-blacklist_ | Passes the ignore-gpu-blacklist flag to the Chrome engine, to allow for WebGl apps to work on non supported graphics cards. | OK
+_--enable-es3-apis_ | Passes the enable-es3-apis flag to the Chrome engine, to force the activation of WebGl 2.0. | OK
+_--insecure_ | Forces the packaged app to ignore web security errors, such as [Mixed Content](https://developer.mozilla.org/en-US/docs/Security/Mixed_content) errors when receiving HTTP content on a HTTPS site. | OK
+_--internal-urls (regex)_ | Regular expression of URLs to consider "internal"; all other URLs will be opened in an external browser. Defaults to URLs on same second-level domain as app. Example: `golem-sdk https://google.com --internal-urls ".*?\.google\.*?"` | OK
+_--flash_ | If `--flash` is specified, Golem will automatically try to determine the location of your Google Chrome flash binary. Take note that the version of Chrome on your computer should be the same as the version used by the version of Electron for the Golem package. Take note that if this flag is specified, the `--insecure` flag will be added automatically, to prevent the Mixed Content errors on sites such as [Twitch.tv](https://www.twitch.tv/). | OK
+_--flash-path (value)_ | You can also specify the path to the Chrome flash plugin directly with this flag. The path can be found at [chrome://plugins](chrome://plugins), under `Adobe Flash Player` > `Location`. This flag automatically enables the `--flash` flag as well. | OK
+_--disk-cache-size (value)_ | Forces the maximum disk space to be used by the disk cache. Value is given in bytes. | OK
+_--inject <value>_ | Allows you to inject a javascript or css file. This command can be run multiple times to inject the files. Example: `golem-sdk http://google.com --inject ./some-js-injection.js --inject ./some-css-injection.css ~/Desktop` | OK
+_--full-screen_ | Makes the packaged app start in full screen. | OK
+_--maximize_ | Makes the packaged app start maximized. | OK
+_--hide-window-frame_ | Disable window frame and controls. | OK
+_--verbose_ | Shows detailed logs in the console. | OK
+_--disable-context-menu_ | Disable the context menu. | OK
+_--disable-dev-tools_ | Disable the Chrome developer tools. | OK
+_--crash-reporter (value)_ | Enables crash reporting and set the URL to submit crash reports to, Example: `golem-sdk http://google.com --crash-reporter https://electron-crash-reporter.appspot.com/PROJECT_ID/create/` | OK
+_--zoom (value)_ | Sets a default zoom factor to be used when the app is opened, defaults to `1.0`. | OK
+_--single-instance_ | Prevents application from being run multiple times. If such an attempt occurs the already running instance is brought to front. | OK
+_--tray_ | Application will stay as an icon in the system tray. Prevents application from being closed from clicking the window close button. | OK
+_--basic-auth-username (value) --basic-auth-password (value)_ | Set basic http(s) auth via the command line to have the app automatically log you in to a protected site. Both fields are required if one is set. | OK
+_--processEnvs (json-string)_ | a JSON string of key/value pairs to be set as environment variables before any browser windows are opened. Example: `golem-sdk <your-geolocation-enabled-website> --processEnvs '{"GOOGLE_API_KEY": "<your-google-api-key>"}'` | OK
+_--file-download-options (json-string)_ | a JSON string of key/value pairs to be set as file download options. See [electron-dl](https://github.com/sindresorhus/electron-dl) for available options. Example: `golem-sdk <your-website> --file-download-options '{"saveAs": true}'` | OK
+_--always-on-top_ | Enable always on top for the packaged application. | OK
 
 ---
 
-MIT License
+### programmatic api + golem-craft tool
 
-Copyright (c) 2018 Loouis Low
+You can use the GOLEM SDK programmatic API together with the dedicated `golem-craft.sh` script to built multiple apps at once.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+#### _crafter
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+download `golem-apps`,
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+```bash
+$ git clone https://github.com/loouislow81/golem-apps
+$ cd golem-apps
+$ npm i
+```
+
+### cli
+
+flags | explain
+----- | -------
+_--help_ | Display this information
+_--craft-all_ | Craft all: build, package, dist, clean
+_--craft-select (appname)_ | Craft all: build, package, dist, clean
+_--craft-list_ | Build everything from `/tasks/`
+_--craft-package_ | Package with `.tar.gz` format
+_--craft-dist_ | Move package to `/apps/`
+_--css-inject (path)_ | Overwrite all app with CSS inject
+_--js-inject (path)_ |  Overwrite all app with JS inject
+_--clean_ | Clean up `/__staging/`
+
+#### _structure
+
+```text
+.
+├── applist.json (for mock)
+├── apps (package here is a tar.gz format moved from staging folder)
+├── golem-craft.sh
+├── inject.css (put your CSS code here)
+├── inject.js (put your JS code here)
+├── library.json (for mock)
+├── list.conf (custom list to build only selected apps)
+├── node_modules (put `golem-sdk` here!)
+├── notifications.json (for mock)
+├── __restricted (ignore)
+├── __staging (staging area after app was built)
+└── tasks
+```
+
+copy `golem-sdk` folder into `golem-apps` root folder e.g. `/golem-apps/node_modules/`, you will need to manually create new folder named `node_modules` before copy `golem-sdk` into it.
+
+alright, you have set up a dependency for `golem-apps` to work with `golem-sdk`, let's craft new app in no time that came with the task files in `tasks/` folder.
+
+```bash
+$ ./golem-craft --craft-select <appname>
+```
+
+**Note:** The availability of _<appname>_ is depend on the content in `tasks/` folder. Where you can preset your app programmatically.
+
+#### _task
+
+to make your app building programmatically, you need to create `task` file for each app, the `js task file` and `png app icon` file name should be the same.
+
+example to create new task file `<appname>.js`,
+
+```javascript
+const golem = require('golem-sdk').default
+
+homePath = '../'
+taskPath = 'tasks/'
+staging = homePath + '__staging'
+category = 'adobe/'
+appName = 'adobe-color-cc'
+appDesc = 'Capture colour combinations whenever inspiration strikes with Adobe Color CC and your iPhone, iPad or Android device. Your colour themes are automatically saved to Creative Cloud Libraries for access in desktop and mobile apps or to share with your team.'
+
+options = {
+  name: appName,
+  targetUrl: 'https://color.adobe.com/create/color-wheel',
+  icon: category + appName + '.png',
+  platform: 'linux',
+  arch: 'x64',
+  version: '1.0.1',
+  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36',
+  asar: true,
+  width: 1280,
+  height: 800,
+  overwrite: false,
+  counter: false,
+  bounce: false,
+  showMenuBar: false,
+  fastQuit: false,
+  ignoreCertificate: false,
+  ignoreGpuBlacklist: false,
+  enableEs3Apis: false,
+  insecure: false,
+  //flashPluginDir: '/usr/lib/pepperflashplugin-nonfree/libpepflashplayer.so',
+  internalUrls: null,
+  diskCacheSize: '200000000',
+  honest: false,
+  fullScreen: false,
+  maximize: false,
+  zoom: 1.0,
+  singleInstance: false,
+  fileDownloadOptions: {
+    saveAs: true
+  },
+  win32metadata: {
+    ProductName: appName,
+    InternalName: appName,
+    FileDescription: appDesc
+  },
+  out: staging
+}
+
+golem(options, (error, appPath) => {
+  if (error) {
+    console.error(error)
+    return
+  }
+  console.log(appName + ' app has moved to to >>', appPath)
+})
+```

@@ -1,67 +1,83 @@
-label, input {
-	display: block;
+label,
+input {
+  display: block;
 }
 
 * {
-	font-family: Verdana, sans-serif;
+  font-family: Verdana, sans-serif;
 }
 
-html, body {
-	-webkit-app-region: drag;
-	margin: 0;
-	height: 100%;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  color: #ffffff;
+  -webkit-app-region: drag;
+  background: rgba(243, 59, 69, 1.0);
+  background: -webkit-linear-gradient(top left, rgba(243, 59, 69, 1.0), rgba(246, 118, 27, 1.0));
+  background: -moz-linear-gradient(top left, rgba(243, 59, 69, 1.0), rgba(246, 118, 27, 1.0));
+  background: linear-gradient(top left, rgba(243, 59, 69, 1.0), rgba(246, 118, 27, 1.0));
 }
 
-html, html a {
-	-webkit-font-smoothing: antialiased;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+.logo {
+  height: 100px;
+  width: auto;
 }
 
 .login-form {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-form>div {
-	margin-bottom: 30px;
+.login-form> div {
+  margin-bottom: 30px;
 }
 
-.login-form>div>label {
-	margin-bottom: 25px;
-	color: rgba(0, 0, 0, 0.7);
-	font-size: 18px;
-	font-weight: 100;
-	letter-spacing: 5px;
-	text-align: center;
-	text-transform: uppercase;
-}
-
-.login-form>div>input {
-	-webkit-app-region: no-drag;
-	border: 2px solid #929292;
-	border-radius: 30px;
-	padding: 5px 15px 5px 15px;
-	width: 225px;
-	height: 30px;
-	font-size: 18px;
-}
-
-.login-form>div>button {
-  -webkit-app-region: no-drag;
-	border: 0;
-  border-radius: 30px;
-  background-color: #414e54;
-  width: 255px;
-  height: 44px;
-  color: white;
-  font-size: 15px;
+.login-form> div> label {
+  margin-bottom: 10px;
+  letter-spacing: 2px;
   font-weight: 100;
-  text-transform: uppercase;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
 }
 
-button:hover {
-	background-color: #0D47A1;
+.login-form> div> input {
+  height: 40px;
+  width: 200px;
+  color: #ffffff;
+  padding: 0 10px 0 10px;
+  background: #504d4d;
+  font-size: 16px;
+  border: 0px solid #ffffff;
+  border-radius: 30px;
+  -webkit-app-region: no-drag;
+}
+
+.login-form> div> input:hover {
+  background: #ffffff40;
+}
+
+.login-form> div> button {
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  height: 35px;
+  font-family: arial;
+  width: 220px;
+  height: 45px;
+  border-radius: 30px;
+  background-color: #e0e0e0;
+  color: #424242;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.login-form> div> button:hover {
+  background-color: #fff;
+  border: 3px solid #bbbbbb4f;
 }

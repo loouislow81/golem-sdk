@@ -1,11 +1,11 @@
-import gulp from 'gulp'
-import runSequence from 'run-sequence'
-import helpers from './helpers/gulp-helpers'
+import gulp from 'gulp';
+import runSequence from 'run-sequence';
+import helpers from './helpers/gulp-helpers';
 
-const {shellExec} = helpers
+const { shellExec } = helpers;
 
 gulp.task('publish', (done) => {
-  shellExec('npm publish', false, done)
+  shellExec('npm publish', false, done);
 })
 
-gulp.task('release', callback => runSequence('build', 'publish', callback))
+gulp.task('release', (callback) => runSequence('build', 'publish', callback));

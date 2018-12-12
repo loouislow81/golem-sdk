@@ -1,24 +1,23 @@
-const electronPublicApi = ['electron']
+const electronPublicApi = ['electron'];
 
-const nodeModules = {}
+const nodeModules = {};
 electronPublicApi.forEach((apiString) => {
-  nodeModules[apiString] = `commonjs ${apiString}`
+  nodeModules[apiString] = `commonjs ${apiString}`;
 })
 
 module.exports = {
   target: 'node',
   output: {
-    filename: 'main.js'
+    filename: 'main.js',
   },
   node: {
     global: false,
-    __dirname: false
+    __dirname: false,
   },
   externals: nodeModules,
   module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
-    ]
+    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }],
   },
-  devtool: 'source-map'
-}
+  devtool: 'source-map',
+  mode: 'none',
+};

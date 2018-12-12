@@ -1,3 +1,3 @@
-const log = require('loglevel')
+const log = require('loglevel');
 
-log.info('This is a test injecton script')
+log.info('This is a test injecton script');

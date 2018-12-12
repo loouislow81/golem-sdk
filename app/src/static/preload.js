@@ -1,33 +1,33 @@
 /**
  Preload file that will be executed in the renderer process
  */
-import { ipcRenderer, webFrame } from 'electron';
+import { ipcRenderer } from 'electron';
 import path from 'path';
 import fs from 'fs';
 
 const INJECT_JS_PATH = path.join(__dirname, '../../', 'inject/inject.js');
-
+const log = require('loglevel');
 /**
- * Patches window.Notification to set a callback on a new Notification
- * @param callback
+ * Patches window.Notification to:
+ * - set a callback on a new Notification
+ * - set a callback for clicks on notifications
+ * @param createCallback
+ * @param clickCallback
  */
-function setNotificationCallback(callback) {
+function setNotificationCallback(createCallback, clickCallback) {
   const OldNotify = window.Notification;
   const newNotify = (title, opt) => {
-    callback(title, opt);
-    return new OldNotify(title, opt);
-  };
+    createCallback(title, opt);
+    const instance = new OldNotify(title, opt);
+    instance.addEventListener('click', clickCallback);
+    return instance;
+  }
   newNotify.requestPermission = OldNotify.requestPermission.bind(OldNotify);
   Object.defineProperty(newNotify, 'permission', {
     get: () => OldNotify.permission,
   });
 
   window.Notification = newNotify;
-}
-
-function clickSelector(element) {
-  const mouseEvent = new MouseEvent('click');
-  element.dispatchEvent(mouseEvent);
 }
 
 function injectScripts() {
@@ -40,46 +40,26 @@ function injectScripts() {
   require(INJECT_JS_PATH);
 }
 
-setNotificationCallback((title, opt) => {
+function notifyNotificationCreate(title, opt) {
   ipcRenderer.send('notification', title, opt);
-});
+}
+
+function notifyNotificationClick() {
+  ipcRenderer.send('notification-click');
+}
+
+setNotificationCallback(notifyNotificationCreate, notifyNotificationClick);
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.addEventListener('contextmenu', (event) => {
-    event.preventDefault();
-    let targetElement = event.srcElement;
-
-    // the clicked element is the deepest in the DOM, and may not be the <a> bearing the href
-    // for example, <a href="..."><span>Google</span></a>
-    while (!targetElement.href && targetElement.parentElement) {
-      targetElement = targetElement.parentElement;
-    }
-    const targetHref = targetElement.href;
-
-    if (!targetHref) {
-      ipcRenderer.once('contextMenuClosed', () => {
-        clickSelector(event.target);
-        ipcRenderer.send('cancelNewWindowOverride');
-      });
-    }
-
-    ipcRenderer.send('contextMenuOpened', targetHref);
-  }, false);
-
   injectScripts();
-});
+})
 
 ipcRenderer.on('params', (event, message) => {
   const appArgs = JSON.parse(message);
-  console.log('golem.json', appArgs);
-});
+  log.info('golem.json', appArgs);
+})
 
 ipcRenderer.on('debug', (event, message) => {
   // eslint-disable-next-line no-console
-  console.log('debug:', message);
-});
-
-ipcRenderer.on('change-zoom', (event, message) => {
-  webFrame.setZoomFactor(message);
-});
-
+  log.info('debug:', message);
+})

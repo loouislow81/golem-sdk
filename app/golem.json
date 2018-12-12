@@ -1,6 +1,6 @@
 {
   "name": "Google",
-  "targetUrl": "http://google.com",
+  "targetUrl": "https://google.com",
   "badge": false,
   "width": 1280,
   "height": 800,

@@ -1,9 +1,9 @@
-import gulp from 'gulp'
-import requireDir from 'require-dir'
+import gulp from 'gulp';
+import requireDir from 'require-dir';
 
 requireDir('./gulp', {
   recurse: true,
-  duplicates: true
-})
+  duplicates: true,
+});
 
-gulp.task('default', ['build'])
+gulp.task('default', ['build']);

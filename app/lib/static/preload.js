@@ -12,20 +12,25 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var INJECT_JS_PATH = _path2.default.join(__dirname, '../../', 'inject/inject.js');
+var INJECT_JS_PATH = _path2.default.join(__dirname, '../../', 'inject/inject.js'); /**
+                                                                                    Preload file that will be executed in the renderer process
+                                                                                    */
 
+var log = require('loglevel');
 /**
- * Patches window.Notification to set a callback on a new Notification
- * @param callback
+ * Patches window.Notification to:
+ * - set a callback on a new Notification
+ * - set a callback for clicks on notifications
+ * @param createCallback
+ * @param clickCallback
  */
-/**
- Preload file that will be executed in the renderer process
- */
-function setNotificationCallback(callback) {
+function setNotificationCallback(createCallback, clickCallback) {
   var OldNotify = window.Notification;
   var newNotify = function newNotify(title, opt) {
-    callback(title, opt);
-    return new OldNotify(title, opt);
+    createCallback(title, opt);
+    var instance = new OldNotify(title, opt);
+    instance.addEventListener('click', clickCallback);
+    return instance;
   };
   newNotify.requestPermission = OldNotify.requestPermission.bind(OldNotify);
   Object.defineProperty(newNotify, 'permission', {
@@ -35,11 +40,6 @@ function setNotificationCallback(callback) {
   });
 
   window.Notification = newNotify;
-}
-
-function clickSelector(element) {
-  var mouseEvent = new MouseEvent('click');
-  element.dispatchEvent(mouseEvent);
 }
 
 function injectScripts() {
@@ -52,46 +52,27 @@ function injectScripts() {
   require(INJECT_JS_PATH);
 }
 
-setNotificationCallback(function (title, opt) {
+function notifyNotificationCreate(title, opt) {
   _electron.ipcRenderer.send('notification', title, opt);
-});
+}
+
+function notifyNotificationClick() {
+  _electron.ipcRenderer.send('notification-click');
+}
+
+setNotificationCallback(notifyNotificationCreate, notifyNotificationClick);
 
 document.addEventListener('DOMContentLoaded', function () {
-  window.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
-    var targetElement = event.srcElement;
-
-    // the clicked element is the deepest in the DOM, and may not be the <a> bearing the href
-    // for example, <a href="..."><span>Google</span></a>
-    while (!targetElement.href && targetElement.parentElement) {
-      targetElement = targetElement.parentElement;
-    }
-    var targetHref = targetElement.href;
-
-    if (!targetHref) {
-      _electron.ipcRenderer.once('contextMenuClosed', function () {
-        clickSelector(event.target);
-        _electron.ipcRenderer.send('cancelNewWindowOverride');
-      });
-    }
-
-    _electron.ipcRenderer.send('contextMenuOpened', targetHref);
-  }, false);
-
   injectScripts();
 });
 
 _electron.ipcRenderer.on('params', function (event, message) {
   var appArgs = JSON.parse(message);
-  console.log('golem.json', appArgs);
+  log.info('golem.json', appArgs);
 });
 
 _electron.ipcRenderer.on('debug', function (event, message) {
   // eslint-disable-next-line no-console
-  console.log('debug:', message);
-});
-
-_electron.ipcRenderer.on('change-zoom', function (event, message) {
-  _electron.webFrame.setZoomFactor(message);
+  log.info('debug:', message);
 });
 //# sourceMappingURL=preload.js.map

@@ -1,4 +1,4 @@
-import { Menu, shell, clipboard } from 'electron';
+import { Menu, _electron } from 'electron';
 
 /**
  * @param golemVersion
@@ -29,15 +29,25 @@ function createMenu({
   if (Menu.getApplicationMenu()) {
     return;
   }
-  const zoomResetLabel = (zoomBuildTimeValue === 1.0) ?
-    'Reset Zoom' :
-    `Reset Zoom (to ${zoomBuildTimeValue * 100}%, set at build time)`;
+  const zoomResetLabel =
+    zoomBuildTimeValue === 1.0
+      ? 'Reset Zoom'
+      : `Reset Zoom (to ${zoomBuildTimeValue * 100}%, set at build time)`;
 
   const template = [
     {
-      label: 'App',
+      label: 'GOLEM',
       role: 'window',
       submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'CmdOrCtrl+R',
+          click: function click(item, focusedWindow) {
+            if (focusedWindow) {
+              focusedWindow.reload();
+            }
+          },
+        },
         {
           label: 'Minimize',
           accelerator: 'CmdOrCtrl+M',
@@ -51,59 +61,53 @@ function createMenu({
       ],
     },
     {
-      label: 'Privacy',
-        submenu: [
-      //   {
-      //     label: 'Undo',
-      //     accelerator: 'CmdOrCtrl+Z',
-      //     role: 'undo',
-      //   },
-      //   {
-      //     label: 'Redo',
-      //     accelerator: 'Shift+CmdOrCtrl+Z',
-      //     role: 'redo',
-      //   },
-      //   {
-      //     type: 'separator',
-      //   },
-      //   {
-      //     label: 'Cut',
-      //     accelerator: 'CmdOrCtrl+X',
-      //     role: 'cut',
-      //   },
-      //   {
-      //     label: 'Copy',
-      //     accelerator: 'CmdOrCtrl+C',
-      //     role: 'copy',
-      //   },
-      //   {
-      //     label: 'Copy Current URL',
-      //     accelerator: 'CmdOrCtrl+L',
-      //     click: () => {
-      //       const currentURL = getCurrentUrl();
-      //       clipboard.writeText(currentURL);
-      //     },
-      //   },
-      //   {
-      //     label: 'Paste',
-      //     accelerator: 'CmdOrCtrl+V',
-      //     role: 'paste',
-      //   },
-      //   {
-      //     label: 'Paste and Match Style',
-      //     accelerator: 'CmdOrCtrl+Shift+V',
-      //     role: 'pasteandmatchstyle',
-      //   },
-      //   {
-      //     label: 'Select All',
-      //     accelerator: 'CmdOrCtrl+A',
-      //     role: 'selectall',
-      //   },
+      label: 'Edit',
+      submenu: [
         {
-          label: 'Flush App Data',
-          click: () => {
-            clearAppData();
+          label: 'Undo',
+          accelerator: 'CmdOrCtrl+Z',
+          role: 'undo',
+        },
+        {
+          label: 'Redo',
+          accelerator: 'Shift+CmdOrCtrl+Z',
+          role: 'redo',
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Cut',
+          accelerator: 'CmdOrCtrl+X',
+          role: 'cut',
+        },
+        {
+          label: 'Copy',
+          accelerator: 'CmdOrCtrl+C',
+          role: 'copy',
+        },
+        {
+          label: 'Copy Current URL',
+          accelerator: 'CmdOrCtrl+L',
+          click: function click() {
+            const currentURL = getCurrentUrl();
+            _electron.clipboard.writeText(currentURL);
           },
+        },
+        {
+          label: 'Paste',
+          accelerator: 'CmdOrCtrl+V',
+          role: 'paste',
+        },
+        {
+          label: 'Paste and Match Style',
+          accelerator: 'CmdOrCtrl+Shift+V',
+          role: 'pasteandmatchstyle',
+        },
+        {
+          label: 'Select All',
+          accelerator: 'CmdOrCtrl+A',
+          role: 'selectall',
         },
       ],
     },
@@ -113,42 +117,19 @@ function createMenu({
         {
           label: 'Back',
           accelerator: 'CmdOrCtrl+[',
-          click: () => {
+          click: function click() {
             goBack();
           },
         },
         {
           label: 'Forward',
           accelerator: 'CmdOrCtrl+]',
-          click: () => {
+          click: function click() {
             goForward();
           },
         },
         {
-          label: 'Reload',
-          accelerator: 'CmdOrCtrl+R',
-          click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.reload();
-            }
-          },
-        },
-        {
           type: 'separator',
-        },
-        {
-          label: 'Toggle Full Screen',
-          accelerator: (() => {
-            if (process.platform === 'darwin') {
-              return 'Ctrl+Command+F';
-            }
-            return 'F11';
-          })(),
-          click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
-            }
-          },
         },
         {
           label: 'Zoom In',
@@ -158,7 +139,7 @@ function createMenu({
             }
             return 'Ctrl+=';
           })(),
-          click: () => {
+          click: function click() {
             zoomIn();
           },
         },
@@ -170,7 +151,7 @@ function createMenu({
             }
             return 'Ctrl+-';
           })(),
-          click: () => {
+          click: function click() {
             zoomOut();
           },
         },
@@ -182,36 +163,75 @@ function createMenu({
             }
             return 'Ctrl+0';
           })(),
-          click: () => {
+          click: function click() {
             zoomReset();
           },
         },
-        // {
-        //   label: 'Toggle Developer Tools',
-        //   accelerator: (() => {
-        //     if (process.platform === 'darwin') {
-        //       return 'Alt+Command+I';
-        //     }
-        //     return 'Ctrl+Shift+I';
-        //   })(),
-        //   click: (item, focusedWindow) => {
-        //     if (focusedWindow) {
-        //       focusedWindow.toggleDevTools();
-        //     }
-        //   },
-        // },
+        {
+          label: 'Toggle Full Screen',
+          accelerator: (() => {
+            if (process.platform === 'darwin') {
+              return 'Ctrl+Command+F';
+            }
+            return 'F11';
+          })(),
+          click: function click(item, focusedWindow) {
+            if (focusedWindow) {
+              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+            }
+          },
+        },
+      ],
+    },
+    {
+      label: 'Privacy',
+      submenu: [
+        {
+          label: 'Flush App Data',
+          click: function click() {
+            clearAppData();
+          },
+        },
       ],
     },
     {
       label: 'About',
-      role: 'help',
       submenu: [
         {
-          label: `Built with Golem v${golemVersion}`,
-          click: () => {
-            shell.openExternal('https://github.com/loouislow81');
+          label: `GOLEM Engine v${golemVersion}`,
+          click: function click() {
+            _electron.shell.openExternal(
+              'https://github.com/loouislow81/golem#README.md',
+            );
           },
-        }
+        },
+        {
+          label: 'Report an Issue',
+          click: function click() {
+            _electron.shell.openExternal(
+              'https://github.com/loouislow81/golem/issues',
+            );
+          },
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Get GOLEM AppStore',
+          click: function click() {
+            _electron.shell.openExternal(
+              'https://github.com/loouislow81/golem-appstore',
+            );
+          },
+        },
+        {
+          label: 'Get GOLEM CLI',
+          click: function click() {
+            _electron.shell.openExternal(
+              'https://github.com/loouislow81/golem-cli',
+            );
+          },
+        },
       ],
     },
   ];

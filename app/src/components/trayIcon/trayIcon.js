@@ -1,8 +1,8 @@
-import path from 'path';
+import helpers from '../../helpers/helpers';
 
-const {
-  app, Tray, Menu, ipcMain,
-} = require('electron');
+const { app, Tray, Menu, ipcMain, nativeImage } = require('electron');
+
+const { getAppIcon, getCounterValue } = helpers;
 
 /**
  *
@@ -14,8 +14,9 @@ function createTrayIcon(inpOptions, mainWindow) {
   const options = Object.assign({}, inpOptions);
 
   if (options.tray) {
-    const iconPath = path.join(__dirname, '../', '/icon.png');
-    const appIcon = new Tray(iconPath);
+    const iconPath = getAppIcon();
+    const nimage = nativeImage.createFromPath(iconPath);
+    const appIcon = new Tray(nimage);
 
     const onClick = () => {
       if (mainWindow.isVisible()) {
@@ -40,18 +41,17 @@ function createTrayIcon(inpOptions, mainWindow) {
 
     mainWindow.on('show', () => {
       appIcon.setHighlightMode('always');
-    });
+    })
 
     mainWindow.on('hide', () => {
       appIcon.setHighlightMode('never');
-    });
+    })
 
     if (options.counter) {
       mainWindow.on('page-title-updated', (e, title) => {
-        const itemCountRegex = /[([{](\d*?)\+?[}\])]/;
-        const match = itemCountRegex.exec(title);
-        if (match) {
-          appIcon.setToolTip(`(${match[1]})  ${options.name}`);
+        const counterValue = getCounterValue(title);
+        if (counterValue) {
+          appIcon.setToolTip(`(${counterValue})  ${options.name}`);
         } else {
           appIcon.setToolTip(options.name);
         }
@@ -62,11 +62,11 @@ function createTrayIcon(inpOptions, mainWindow) {
           return;
         }
         appIcon.setToolTip(`•  ${options.name}`);
-      });
+      })
 
       mainWindow.on('focus', () => {
         appIcon.setToolTip(options.name);
-      });
+      })
     }
 
     appIcon.setToolTip(options.name);
