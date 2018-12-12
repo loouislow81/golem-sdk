@@ -1,6 +1,6 @@
 # golem
 
-Make your Linux desktop live again with Golem. Create desktop apps from progressive web applications.
+SDK for [GOLEM CLI](https://github.com/loouislow81/golem-cli) and [GOLEM App Store](https://github.com/loouislow81/golem-apps)
 
 ## Prebuild Apps
 
