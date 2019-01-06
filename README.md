@@ -19,12 +19,6 @@ $ sudo npm i -g n
 $ sudo n stable
 ```
 
-other dependencies,
-
-```bash
-$ sudo apt install -y wine imagemagick
-```
-
 ---
 
 ### flash Plugin
