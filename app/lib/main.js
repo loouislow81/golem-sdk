@@ -7038,11 +7038,6 @@ function createMenu(_ref) {
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
       role: 'selectall'
-    }, {
-      label: 'Clear App Data',
-      click: function click() {
-        clearAppData();
-      }
     }]
   }, {
     label: 'View',
@@ -7106,19 +7101,6 @@ function createMenu(_ref) {
       click: function click() {
         zoomReset();
       }
-    }, {
-      label: 'Toggle Developer Tools',
-      accelerator: function () {
-        if (process.platform === 'darwin') {
-          return 'Alt+Command+I';
-        }
-        return 'Ctrl+Shift+I';
-      }(),
-      click: function click(item, focusedWindow) {
-        if (focusedWindow) {
-          focusedWindow.toggleDevTools();
-        }
-      }
     }]
   }, {
     label: 'Privacy',
@@ -7151,6 +7133,21 @@ function createMenu(_ref) {
       label: 'Get GOLEM CLI',
       click: function click() {
         _electron.shell.openExternal('https://github.com/loouislow81/golem-cli');
+      }
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Developer Tools',
+      accelerator: function () {
+        if (process.platform === 'darwin') {
+          return 'Alt+Command+I';
+        }
+        return 'Ctrl+Shift+I';
+      }(),
+      click: function click(item, focusedWindow) {
+        if (focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
       }
     }]
   }];

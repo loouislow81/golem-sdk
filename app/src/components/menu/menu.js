@@ -109,12 +109,6 @@ function createMenu({
           accelerator: 'CmdOrCtrl+A',
           role: 'selectall',
         },
-        {
-          label: 'Clear App Data',
-          click: () => {
-            clearAppData();
-          },
-        },
       ],
     },
     {
@@ -187,20 +181,6 @@ function createMenu({
             zoomReset();
           },
         },
-        {
-          label: 'Toggle Developer Tools',
-          accelerator: (() => {
-            if (process.platform === 'darwin') {
-              return 'Alt+Command+I';
-            }
-            return 'Ctrl+Shift+I';
-          })(),
-          click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.toggleDevTools();
-            }
-          },
-        },
       ],
     },
     {
@@ -227,7 +207,7 @@ function createMenu({
           label: 'Report an Issue',
           click: () => {
             shell.openExternal(
-              'https://github.com/loouislow81/golem-sdk/issues',
+              'https://github.com/loouislow81/golem-sdk/issues'
             );
           },
         },
@@ -244,6 +224,23 @@ function createMenu({
           label: 'Get GOLEM CLI',
           click: () => {
             shell.openExternal('https://github.com/loouislow81/golem-cli');
+          },
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Developer Tools',
+          accelerator: (() => {
+            if (process.platform === 'darwin') {
+              return 'Alt+Command+I';
+            }
+            return 'Ctrl+Shift+I';
+          })(),
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.toggleDevTools();
+            }
           },
         },
       ],
