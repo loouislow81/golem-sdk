@@ -30,7 +30,7 @@ export default function(inpOptions) {
     counter: inpOptions.counter || false,
     bounce: inpOptions.bounce || false,
     width: inpOptions.width || 1280,
-    height: inpOptions.height || 800,
+    height: inpOptions.height || 660,
     minWidth: inpOptions.minWidth,
     minHeight: inpOptions.minHeight,
     maxWidth: inpOptions.maxWidth,
