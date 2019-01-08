@@ -15,7 +15,7 @@ function createLoginWindow(loginCallback) {
   ipcMain.once('login-message', (event, usernameAndPassword) => {
     loginCallback(usernameAndPassword[0], usernameAndPassword[1]);
     loginWindow.close();
-  })
+  });
   return loginWindow;
 }
 

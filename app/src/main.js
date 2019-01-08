@@ -1,7 +1,7 @@
 import 'source-map-support/register';
 import fs from 'fs';
 import path from 'path';
-import { app, crashReporter } from 'electron';
+import { app, crashReporter, globalShortcut } from 'electron';
 import electronDownload from 'electron-dl';
 
 import createLoginWindow from './components/login/loginWindow';
@@ -22,7 +22,7 @@ if (appArgs.processEnvs) {
   Object.keys(appArgs.processEnvs).forEach((key) => {
     /* eslint-env node */
     process.env[key] = appArgs.processEnvs[key];
-  })
+  });
 }
 
 let mainWindow;
@@ -78,7 +78,7 @@ if (isOSX()) {
     app.dock.setBadge(count);
     if (bounce && count > currentBadgeCount) app.dock.bounce();
     currentBadgeCount = count;
-  }
+  };
 }
 
 app.on('window-all-closed', () => {
@@ -116,17 +116,28 @@ if (appArgs.crashReporter) {
       submitURL: appArgs.crashReporter,
       uploadToServer: true,
     });
-  })
+  });
 }
 
 app.on('ready', () => {
   mainWindow = createMainWindow(appArgs, app.quit, setDockBadge);
   createTrayIcon(appArgs, mainWindow);
-})
+
+  // Register global shortcuts
+  if (appArgs.globalShortcuts) {
+    appArgs.globalShortcuts.forEach((shortcut) => {
+      globalShortcut.register(shortcut.key, () => {
+        shortcut.inputEvents.forEach((inputEvent) => {
+          mainWindow.webContents.sendInputEvent(inputEvent);
+        });
+      });
+    });
+  }
+});
 
 app.on('new-window-for-tab', () => {
   mainWindow.emit('new-tab');
-})
+});
 
 app.on('login', (event, webContents, request, authInfo, callback) => {
   // for http authentication

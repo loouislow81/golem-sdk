@@ -16,7 +16,7 @@ function tryToInferName({ name, targetUrl }) {
         `Unable to automatically determine app name, falling back to '${DEFAULT_APP_NAME}'. Reason: ${error}`,
       );
       return DEFAULT_APP_NAME;
-    })
+    });
 }
 
 export default function({ platform, name, targetUrl }) {

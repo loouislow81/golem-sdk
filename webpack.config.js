@@ -3,7 +3,7 @@ const electronPublicApi = ['electron'];
 const nodeModules = {};
 electronPublicApi.forEach((apiString) => {
   nodeModules[apiString] = `commonjs ${apiString}`;
-})
+});
 
 module.exports = {
   target: 'node',

@@ -18,13 +18,13 @@ function checkApp(appPath, inputOptions, callback) {
           'google-test-app.app',
           'Contents/Resources/app',
         );
-        break
+        break;
       case 'linux':
         relPathToConfig = 'resources/app';
-        break
+        break;
       case 'win32':
         relPathToConfig = 'resources/app';
-        break
+        break;
       default:
         throw new Error('Unknown app platform');
     }
@@ -63,17 +63,17 @@ describe('Nativefier Module', () => {
         golem(options, (error, appPath) => {
           if (error) {
             callback(error);
-            return
+            return;
           }
 
           checkApp(appPath, options, (err) => {
             callback(err);
-          })
+          });
         });
       },
       (error) => {
         done(error);
       },
     );
-  })
+  });
 });

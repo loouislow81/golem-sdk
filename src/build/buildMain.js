@@ -1,11 +1,3 @@
-/**
- * @file: src/build/buildMain.js
- * @description:
- * @license: MIT
- * @author: Loouis Low <loouis@gmail.com>
- * @copyright: Loouis Low (https://github.com/loouislow81/golem-sdk)
- */
-
 import path from 'path';
 import packager from 'electron-packager';
 import tmp from 'tmp';
@@ -73,12 +65,12 @@ function maybeNoIconOption(options) {
 function maybeCopyIcons(options, appPath, callback) {
   if (!options.icon) {
     callback();
-    return
+    return;
   }
 
   if (options.platform === 'darwin' || options.platform === 'mas') {
     callback();
-    return
+    return;
   }
 
   // windows & linux
@@ -87,7 +79,7 @@ function maybeCopyIcons(options, appPath, callback) {
   const destFileName = `icon${path.extname(options.icon)}`;
   copy(options.icon, path.join(destIconPath, destFileName), (error) => {
     callback(error);
-  })
+  });
 }
 
 /**
@@ -168,10 +160,7 @@ function buildMain(inpOptions, callback) {
   const options = Object.assign({}, inpOptions);
 
   // pre process app
-  const tmpObj = tmp.dirSync({
-    mode: '0755',
-    unsafeCleanup: true,
-  });
+  const tmpObj = tmp.dirSync({ mode: '0755', unsafeCleanup: true });
   const tmpPath = tmpObj.name;
 
   // todo check if this is still needed on later version of packager
@@ -189,27 +178,27 @@ function buildMain(inpOptions, callback) {
           })
           .catch((error) => {
             cb(error);
-          })
+          });
       },
       (opts, cb) => {
         progress.tick('copying');
         buildApp(opts.dir, tmpPath, opts, (error) => {
           if (error) {
             cb(error);
-            return
+            return;
           }
           // Change the reference file for the Electron app to be the temporary path
           const newOptions = Object.assign({}, opts, {
             dir: tmpPath,
           });
           cb(null, newOptions);
-        })
+        });
       },
       (opts, cb) => {
         progress.tick('icons');
         iconBuild(opts, (error, optionsWithIcon) => {
           cb(null, optionsWithIcon);
-        })
+        });
       },
       (opts, cb) => {
         progress.tick('packaging');
@@ -232,7 +221,7 @@ function buildMain(inpOptions, callback) {
           .catch((error) => {
             packagerConsole.restore(); // restore console.error
             cb(error, opts); // options still contain the icon to waterfall
-          })
+          });
       },
       (opts, appPathArray, cb) => {
         progress.tick('finalizing');
@@ -240,12 +229,12 @@ function buildMain(inpOptions, callback) {
         const appPath = getAppPath(appPathArray);
         if (!appPath) {
           cb();
-          return
+          return;
         }
 
         maybeCopyIcons(opts, appPath, (error) => {
           cb(error, appPath);
-        })
+        });
       },
     ],
     (error, appPath) => {

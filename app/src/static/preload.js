@@ -1,9 +1,22 @@
 /**
  Preload file that will be executed in the renderer process
  */
-import { ipcRenderer } from 'electron';
-import path from 'path';
-import fs from 'fs';
+
+/**
+ * Note: This needs to be attached prior to the imports, as the they will delay
+ * the attachment till after the event has been raised.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Due to the early attachment, this triggers a linter error
+  // because it's not yet been defined.
+  // eslint-disable-next-line no-use-before-define
+  injectScripts();
+});
+
+// Disable imports being first due to the above event attachment
+import { ipcRenderer } from 'electron'; // eslint-disable-line import/first
+import path from 'path'; // eslint-disable-line import/first
+import fs from 'fs'; // eslint-disable-line import/first
 
 const INJECT_JS_PATH = path.join(__dirname, '../../', 'inject/inject.js');
 const log = require('loglevel');
@@ -21,7 +34,7 @@ function setNotificationCallback(createCallback, clickCallback) {
     const instance = new OldNotify(title, opt);
     instance.addEventListener('click', clickCallback);
     return instance;
-  }
+  };
   newNotify.requestPermission = OldNotify.requestPermission.bind(OldNotify);
   Object.defineProperty(newNotify, 'permission', {
     get: () => OldNotify.permission,
@@ -43,23 +56,18 @@ function injectScripts() {
 function notifyNotificationCreate(title, opt) {
   ipcRenderer.send('notification', title, opt);
 }
-
 function notifyNotificationClick() {
   ipcRenderer.send('notification-click');
 }
 
 setNotificationCallback(notifyNotificationCreate, notifyNotificationClick);
 
-document.addEventListener('DOMContentLoaded', () => {
-  injectScripts();
-})
-
 ipcRenderer.on('params', (event, message) => {
   const appArgs = JSON.parse(message);
   log.info('golem.json', appArgs);
-})
+});
 
 ipcRenderer.on('debug', (event, message) => {
   // eslint-disable-next-line no-console
   log.info('debug:', message);
-})
+});

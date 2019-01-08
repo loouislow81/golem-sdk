@@ -23,14 +23,12 @@ const PNG_TO_ICNS_BIN_PATH = path.join(__dirname, '../..', 'bin/convertToIcns');
 function convertToIcns(pngSrc, icnsDest, callback) {
   if (!isOSX()) {
     callback('OSX is required to convert .png to .icns icon', pngSrc);
-    return
+    return;
   }
 
   shell.exec(
     `${PNG_TO_ICNS_BIN_PATH} ${pngSrc} ${icnsDest}`,
-    {
-      silent: true,
-    },
+    { silent: true },
     (exitCode, stdOut, stdError) => {
       if (stdOut.includes('icon.iconset:error') || exitCode) {
         if (exitCode) {
@@ -40,12 +38,12 @@ function convertToIcns(pngSrc, icnsDest, callback) {
               stdError,
             },
             pngSrc,
-          )
-          return
+          );
+          return;
         }
 
         callback(stdOut, pngSrc);
-        return
+        return;
       }
 
       callback(null, icnsDest);
@@ -59,9 +57,7 @@ function convertToIcns(pngSrc, icnsDest, callback) {
  * @param {pngToIcnsCallback} callback
  */
 function convertToIcnsTmp(pngSrc, callback) {
-  const tempIconDirObj = tmp.dirSync({
-    unsafeCleanup: true,
-  });
+  const tempIconDirObj = tmp.dirSync({ unsafeCleanup: true });
   const tempIconDirPath = tempIconDirObj.name;
   convertToIcns(pngSrc, `${tempIconDirPath}/icon.icns`, callback);
 }

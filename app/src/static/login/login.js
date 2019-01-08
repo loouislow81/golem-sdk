@@ -9,4 +9,4 @@ form.addEventListener('submit', (event) => {
   const username = document.getElementById('username-input').value;
   const password = document.getElementById('password-input').value;
   ipcRenderer.send('login-message', [username, password]);
-})
+});

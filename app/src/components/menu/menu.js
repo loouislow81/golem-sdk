@@ -1,4 +1,4 @@
-import { Menu, _electron } from 'electron';
+import { Menu, shell, clipboard } from 'electron';
 
 /**
  * @param golemVersion
@@ -42,7 +42,7 @@ function createMenu({
         {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
-          click: function click(item, focusedWindow) {
+          click: (item, focusedWindow) => {
             if (focusedWindow) {
               focusedWindow.reload();
             }
@@ -89,9 +89,9 @@ function createMenu({
         {
           label: 'Copy Current URL',
           accelerator: 'CmdOrCtrl+L',
-          click: function click() {
+          click: () => {
             const currentURL = getCurrentUrl();
-            _electron.clipboard.writeText(currentURL);
+            clipboard.writeText(currentURL);
           },
         },
         {
@@ -109,6 +109,12 @@ function createMenu({
           accelerator: 'CmdOrCtrl+A',
           role: 'selectall',
         },
+        {
+          label: 'Clear App Data',
+          click: () => {
+            clearAppData();
+          },
+        },
       ],
     },
     {
@@ -117,19 +123,33 @@ function createMenu({
         {
           label: 'Back',
           accelerator: 'CmdOrCtrl+[',
-          click: function click() {
+          click: () => {
             goBack();
           },
         },
         {
           label: 'Forward',
           accelerator: 'CmdOrCtrl+]',
-          click: function click() {
+          click: () => {
             goForward();
           },
         },
         {
           type: 'separator',
+        },
+        {
+          label: 'Toggle Full Screen',
+          accelerator: (() => {
+            if (process.platform === 'darwin') {
+              return 'Ctrl+Command+F';
+            }
+            return 'F11';
+          })(),
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+            }
+          },
         },
         {
           label: 'Zoom In',
@@ -139,7 +159,7 @@ function createMenu({
             }
             return 'Ctrl+=';
           })(),
-          click: function click() {
+          click: () => {
             zoomIn();
           },
         },
@@ -151,7 +171,7 @@ function createMenu({
             }
             return 'Ctrl+-';
           })(),
-          click: function click() {
+          click: () => {
             zoomOut();
           },
         },
@@ -163,21 +183,21 @@ function createMenu({
             }
             return 'Ctrl+0';
           })(),
-          click: function click() {
+          click: () => {
             zoomReset();
           },
         },
         {
-          label: 'Toggle Full Screen',
+          label: 'Toggle Developer Tools',
           accelerator: (() => {
             if (process.platform === 'darwin') {
-              return 'Ctrl+Command+F';
+              return 'Alt+Command+I';
             }
-            return 'F11';
+            return 'Ctrl+Shift+I';
           })(),
-          click: function click(item, focusedWindow) {
+          click: (item, focusedWindow) => {
             if (focusedWindow) {
-              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+              focusedWindow.toggleDevTools();
             }
           },
         },
@@ -199,17 +219,15 @@ function createMenu({
       submenu: [
         {
           label: `GOLEM Engine v${golemVersion}`,
-          click: function click() {
-            _electron.shell.openExternal(
-              'https://github.com/loouislow81/golem#README.md',
-            );
+          click: () => {
+            shell.openExternal('https://github.com/loouislow81/golem-sdk');
           },
         },
         {
           label: 'Report an Issue',
-          click: function click() {
-            _electron.shell.openExternal(
-              'https://github.com/loouislow81/golem/issues',
+          click: () => {
+            shell.openExternal(
+              'https://github.com/loouislow81/golem-sdk/issues',
             );
           },
         },
@@ -217,19 +235,15 @@ function createMenu({
           type: 'separator',
         },
         {
-          label: 'Get GOLEM AppStore',
-          click: function click() {
-            _electron.shell.openExternal(
-              'https://github.com/loouislow81/golem-appstore',
-            );
+          label: 'Get GOLEM Desktop',
+          click: () => {
+            shell.openExternal('https://github.com/loouislow81/golem-appstore');
           },
         },
         {
           label: 'Get GOLEM CLI',
-          click: function click() {
-            _electron.shell.openExternal(
-              'https://github.com/loouislow81/golem-cli',
-            );
+          click: () => {
+            shell.openExternal('https://github.com/loouislow81/golem-cli');
           },
         },
       ],

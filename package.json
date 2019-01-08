@@ -1,38 +1,91 @@
 {
   "name": "golem-sdk",
-  "version": "2.0.0",
-  "description": "",
-  "main": "lib/index.js",
-  "bin": {
-    "golem-sdk": "lib/cli.js"
-  },
-  "author": "Loouis Low",
+  "version": "2.0.33",
+  "description": "SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.",
+  "author": "Loouis Low <loouis@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/loouislow81/golem-sdk#readme",
   "bugs": {
     "url": "https://github.com/loouislow81/golem-sdk/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/loouislow81/golem-sdk.git"
+  "keywords": [
+    "desktop",
+    "electron",
+    "app",
+    "native",
+    "wrapper"
+  ],
+  "bin": {
+    "golem-sdk": "lib/cli.js"
   },
+  "main": "lib/index.js",
   "scripts": {
-    "dev-up": "yarn install && (cd ./app && yarn install) && yarn run build",
-    "dev-up-win": "yarn install & cd app & yarn install & cd .. & yarn run build",
+    "dev-up": "npm install && (cd ./app && npm install) && npm run build",
+    "dev-up-win": "npm install & cd app & npm install & cd .. & npm run build",
     "test": "jest src",
     "guard": "jest --watch src",
     "e2e": "jest e2e",
     "tdd": "gulp tdd",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "ci": "yarn run lint && yarn test && yarn run e2e",
+    "ci": "npm run lint && npm test && npm run e2e",
     "clean": "gulp clean",
     "build": "gulp build",
     "watch": "while true ; do gulp watch ; done",
-    "package-placeholder": "yarn run build && node lib/cli.js http://www.bennish.net/web-notifications.html ~/Desktop --overwrite --name notification-test --icon ./test-resources/iconSampleGrey.png --inject ./test-resources/test-injection.js --inject ./test-resources/test-injection.css && open ~/Desktop/notification-test-darwin-x64/notification-test.app",
-    "start-placeholder": "yarn run build && electron app",
+    "package-placeholder": "npm run build && node lib/cli.js http://www.bennish.net/web-notifications.html ~/Desktop --overwrite --name notification-test --icon ./test-resources/iconSampleGrey.png --inject ./test-resources/test-injection.js --inject ./test-resources/test-injection.css && open ~/Desktop/notification-test-darwin-x64/notification-test.app",
+    "start-placeholder": "npm run build && electron app",
     "changelog": "./scripts/changelog",
     "format": "prettier --write '{gulp,src}/**/*.js' 'app/src/**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loouislow81/golem-sdk.git"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "cheerio": "^1.0.0-rc.2",
+    "commander": "^2.14.0",
+    "electron-context-menu": "^0.10.1",
+    "electron-dl": "^1.12.0",
+    "electron-packager": "^12.0.1",
+    "electron-window-state": "^5.0.3",
+    "gitcloud": "^0.1.0",
+    "hasbin": "^1.2.3",
+    "lodash": "^4.17.5",
+    "loglevel": "^1.6.1",
+    "ncp": "^2.0.0",
+    "page-icon": "^0.3.0",
+    "progress": "^2.0.0",
+    "sanitize-filename": "^1.6.1",
+    "shelljs": "^0.8.1",
+    "source-map-support": "^0.5.3",
+    "tmp": "0.0.33",
+    "validator": "^10.2.0",
+    "wurl": "^2.5.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^23.4.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "del": "^3.0.0",
+    "eslint": "^5.2.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "jest": "^23.4.1",
+    "prettier": "^1.12.1",
+    "require-dir": "^1.0.0",
+    "run-sequence": "^2.2.1",
+    "webpack-stream": "^5.0.0"
   },
   "engines": {
     "node": ">= 4.0"
@@ -51,50 +104,5 @@
         }
       ]
     ]
-  },
-  "dependencies": {
-    "async": "^2.6.0",
-    "axios": "^0.18.0",
-    "babel-polyfill": "^6.26.0",
-    "cheerio": "^1.0.0-rc.2",
-    "commander": "^2.14.0",
-    "electron": "^3.0.10",
-    "electron-packager": "^12.0.1",
-    "gitcloud": "^0.1.0",
-    "hasbin": "^1.2.3",
-    "lodash": "^4.17.5",
-    "loglevel": "^1.6.1",
-    "ncp": "^2.0.0",
-    "page-icon": "^0.3.0",
-    "progress": "^2.0.0",
-    "sanitize-filename": "^1.6.1",
-    "shelljs": "^0.8.1",
-    "source-map-support": "^0.5.3",
-    "tmp": "0.0.33",
-    "validator": "^10.2.0"
-  },
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-jest": "^23.4.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "del": "^3.0.0",
-    "eslint": "^5.2.0",
-    "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-config-prettier": "^3.0.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-prettier": "^2.6.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.1",
-    "gulp-sourcemaps": "^2.6.4",
-    "jest": "^23.4.1",
-    "prettier": "^1.12.1",
-    "regenerator-runtime": "^0.12.0",
-    "require-dir": "^1.0.0",
-    "run-sequence": "^2.2.1",
-    "webpack-stream": "^5.0.0"
   }
 }

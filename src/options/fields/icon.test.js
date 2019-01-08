@@ -13,7 +13,7 @@ describe('when the icon parameter is passed', () => {
 
     const params = { icon: './icon.png' };
     await expect(icon(params)).resolves.toBe(params.icon);
-  })
+  });
 });
 
 describe('when the icon parameter is not passed', () => {
@@ -25,7 +25,7 @@ describe('when the icon parameter is not passed', () => {
 
     expect(result).toBe(mockedResult);
     expect(inferIcon).toHaveBeenCalledWith(params.targetUrl, params.platform);
-  })
+  });
 
   describe('when inferIcon resolves with an error', () => {
     test('it should handle the error', async () => {
@@ -38,6 +38,6 @@ describe('when the icon parameter is not passed', () => {
       expect(result).toBe(null);
       expect(inferIcon).toHaveBeenCalledWith(params.targetUrl, params.platform);
       expect(log.warn).toHaveBeenCalledTimes(1);
-    })
+    });
   });
-})
+});

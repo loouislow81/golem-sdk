@@ -17,7 +17,7 @@ function testConvertPng(pngName) {
       (error, icnsPath) => {
         if (error) {
           reject(error);
-          return
+          return;
         }
 
         const stat = fs.statSync(icnsPath);
@@ -32,9 +32,9 @@ function testConvertPng(pngName) {
 describe('Get Icon Module', () => {
   test('Can convert a rgb png to icns', async () => {
     await testConvertPng('iconSample.png');
-  })
+  });
 
   test('Can convert a grey png to icns', async () => {
     await testConvertPng('iconSampleGrey.png');
-  })
+  });
 });

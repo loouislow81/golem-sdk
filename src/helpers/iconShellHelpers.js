@@ -24,14 +24,12 @@ function iconShellHelper(shellScriptPath, icoSrc, dest) {
   return new Promise((resolve, reject) => {
     if (isWindows()) {
       reject(new Error('OSX or Linux is required'));
-      return
+      return;
     }
 
     shell.exec(
       `${shellScriptPath} ${icoSrc} ${dest}`,
-      {
-        silent: true,
-      },
+      { silent: true },
       (exitCode, stdOut, stdError) => {
         if (exitCode) {
           // eslint-disable-next-line prefer-promise-reject-errors
@@ -39,19 +37,17 @@ function iconShellHelper(shellScriptPath, icoSrc, dest) {
             stdOut,
             stdError,
           });
-          return
+          return;
         }
 
         resolve(dest);
       },
     );
-  })
+  });
 }
 
 function getTmpDirPath() {
-  const tempIconDirObj = tmp.dirSync({
-    unsafeCleanup: true,
-  });
+  const tempIconDirObj = tmp.dirSync({ unsafeCleanup: true });
   return tempIconDirObj.name;
 }
 

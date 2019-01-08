@@ -24,7 +24,7 @@ function downloadFile(fileUrl) {
         data: response.data,
         ext: path.extname(fileUrl),
       };
-    })
+    });
 }
 
 function allowedIconFormats(platform) {
@@ -48,17 +48,17 @@ function allowedIconFormats(platform) {
     switch (platform) {
       case 'darwin':
         formats.push('.icns');
-        break
+        break;
       case 'linux':
         formats.push('.png');
-        break
+        break;
       case 'win32':
         formats.push('.ico');
-        break
+        break;
       default:
         throw new Error(
           `function allowedIconFormats error: Unknown platform ${platform}`,
-        )
+        );
     }
     return formats;
   }
@@ -81,7 +81,7 @@ function allowedIconFormats(platform) {
       if (icnsToPng) {
         formats.push('.icns');
       }
-      break
+      break;
     case 'win32':
       formats.push('.ico');
       if (pngToIco) {

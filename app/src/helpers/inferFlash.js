@@ -35,12 +35,12 @@ function findSync(pattern, basePath, findDir) {
           return;
         }
         findSyncRecurse(childPath);
-        return
+        return;
       }
 
       if (!findDir) {
         matches.push(childPath);
-        return
+        return;
       }
 
       if (childIsDirectory) {

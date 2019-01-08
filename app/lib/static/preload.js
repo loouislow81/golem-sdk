@@ -12,10 +12,27 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var INJECT_JS_PATH = _path2.default.join(__dirname, '../../', 'inject/inject.js'); /**
-                                                                                    Preload file that will be executed in the renderer process
-                                                                                    */
+/**
+ Preload file that will be executed in the renderer process
+ */
 
+/**
+ * Note: This needs to be attached prior to the imports, as the they will delay
+ * the attachment till after the event has been raised.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  // Due to the early attachment, this triggers a linter error
+  // because it's not yet been defined.
+  // eslint-disable-next-line no-use-before-define
+  injectScripts();
+});
+
+// Disable imports being first due to the above event attachment
+// eslint-disable-line import/first
+// eslint-disable-line import/first
+// eslint-disable-line import/first
+
+var INJECT_JS_PATH = _path2.default.join(__dirname, '../../', 'inject/inject.js');
 var log = require('loglevel');
 /**
  * Patches window.Notification to:
@@ -55,16 +72,11 @@ function injectScripts() {
 function notifyNotificationCreate(title, opt) {
   _electron.ipcRenderer.send('notification', title, opt);
 }
-
 function notifyNotificationClick() {
   _electron.ipcRenderer.send('notification-click');
 }
 
 setNotificationCallback(notifyNotificationCreate, notifyNotificationClick);
-
-document.addEventListener('DOMContentLoaded', function () {
-  injectScripts();
-});
 
 _electron.ipcRenderer.on('params', function (event, message) {
   var appArgs = JSON.parse(message);

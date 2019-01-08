@@ -1,13 +1,5 @@
 #! /usr/bin/env node
 
-/**
- * @file: src/cli.js
- * @description: main command line interface
- * @license: MIT
- * @author: Loouis Low <loouis@gmail.com>
- * @copyright: Loouis Low (https://github.com/loouislow81/golem-sdk)
- */
-
 import 'source-map-support/register';
 import program from 'commander';
 import golem from './index';
@@ -19,6 +11,17 @@ const packageJson = require('./../package');
 function collect(val, memo) {
   memo.push(val);
   return memo;
+}
+
+function parseMaybeBoolString(val) {
+  switch (val) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      return val;
+  }
 }
 
 function parseJson(val) {
@@ -44,6 +47,22 @@ function checkInternet() {
 }
 
 if (require.main === module) {
+  const sanitizedArgs = [];
+  process.argv.forEach((arg) => {
+    if (sanitizedArgs.length > 0) {
+      const previousArg = sanitizedArgs[sanitizedArgs.length - 1];
+
+      // Work around commander.js not supporting default argument for options
+      if (
+        previousArg === '--tray' &&
+        !['true', 'false', 'start-in-tray'].includes(arg)
+      ) {
+        sanitizedArgs.push('true');
+      }
+    }
+    sanitizedArgs.push(arg);
+  });
+
   program
     .version(packageJson.version, '-v, --version')
     .arguments('<targetUrl> [dest]')
@@ -73,7 +92,7 @@ if (require.main === module) {
     )
     .option(
       '-e, --electron-version <value>',
-      "electron version to package, without the 'v', see https://github.com/atom/electron/releases",
+      "electron version to package, without the 'v', see https://github.com/electron/electron/releases",
     )
     .option(
       '--no-overwrite',
@@ -81,7 +100,7 @@ if (require.main === module) {
     )
     .option(
       '-c, --conceal',
-      'packages the source code within your app into an archive, defaults to false, see http://electron.atom.io/docs/v0.36.0/tutorial/application-packaging/',
+      'packages the source code within your app into an archive, defaults to false, see https://electronjs.org/docs/tutorial/application-packaging',
     )
     .option(
       '--counter',
@@ -199,7 +218,11 @@ if (require.main === module) {
       'a JSON string of key/value pairs to be set as file download options.  See https://github.com/sindresorhus/electron-dl for available options.',
       parseJson,
     )
-    .option('--tray', 'allow app to stay in system tray')
+    .option(
+      '--tray [start-in-tray]',
+      "Allow app to stay in system tray. If 'start-in-tray' is given as argument, don't show main window on first start",
+      parseMaybeBoolString,
+    )
     .option('--basic-auth-username <value>', 'basic http(s) auth username')
     .option('--basic-auth-password <value>', 'basic http(s) auth password')
     .option('--always-on-top', 'enable always on top window')
@@ -207,7 +230,11 @@ if (require.main === module) {
       '--title-bar-style <value>',
       "(macOS only) set title bar style ('hidden', 'hiddenInset').  Consider injecting custom CSS (via --inject) for better integration.",
     )
-    .parse(process.argv);
+    .option(
+      '--global-shortcuts <value>',
+      'JSON file with global shortcut configuration. See https://github.com/loouislow81/golem-sdk/blob/master/docs/api.md#global-shortcuts',
+    )
+    .parse(sanitizedArgs);
 
   if (!process.argv.slice(2).length) {
     program.help();
@@ -216,7 +243,7 @@ if (require.main === module) {
   golem(program, (error, appPath) => {
     if (error) {
       log.error(error);
-      return
+      return;
     }
 
     if (!appPath) {
@@ -224,5 +251,5 @@ if (require.main === module) {
       return;
     }
     log.info(`App built to ${appPath}`);
-  })
+  });
 }

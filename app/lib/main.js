@@ -238,6 +238,17 @@ if (appArgs.crashReporter) {
 _electron.app.on('ready', function () {
   mainWindow = (0, _mainWindow2.default)(appArgs, _electron.app.quit, setDockBadge);
   (0, _trayIcon2.default)(appArgs, mainWindow);
+
+  // Register global shortcuts
+  if (appArgs.globalShortcuts) {
+    appArgs.globalShortcuts.forEach(function (shortcut) {
+      _electron.globalShortcut.register(shortcut.key, function () {
+        shortcut.inputEvents.forEach(function (inputEvent) {
+          mainWindow.webContents.sendInputEvent(inputEvent);
+        });
+      });
+    });
+  }
 });
 
 _electron.app.on('new-window-for-tab', function () {
@@ -4675,17 +4686,22 @@ function maybeInjectCss(browserWindow) {
   var injectCss = function injectCss() {
     browserWindow.webContents.insertCSS(cssToInject);
   };
+  var onHeadersReceived = function onHeadersReceived(details, callback) {
+    injectCss();
+    callback({ cancel: false, responseHeaders: details.responseHeaders });
+  };
 
   browserWindow.webContents.on('did-finish-load', function () {
     // remove the injection of css the moment the page is loaded
-    browserWindow.webContents.removeListener('did-get-response-details', injectCss);
+    browserWindow.webContents.session.webRequest.onHeadersReceived(null);
   });
 
   // on every page navigation inject the css
   browserWindow.webContents.on('did-navigate', function () {
-    // we have to inject the css in did-get-response-details to prevent the fouc
-    // will run multiple times
-    browserWindow.webContents.on('did-get-response-details', injectCss);
+    // we have to inject the css in onHeadersReceived so they're early enough
+    // will run multiple times, so did-finish-load will remove this handler
+    browserWindow.webContents.session.webRequest.onHeadersReceived([], // Pass an empty filter list; null will not match _any_ urls
+    onHeadersReceived);
   });
 }
 
@@ -4737,7 +4753,8 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
     fullscreen: options.fullScreen || undefined,
     // Whether the window should always stay on top of other windows. Default is false.
     alwaysOnTop: options.alwaysOnTop,
-    titleBarStyle: options.titleBarStyle
+    titleBarStyle: options.titleBarStyle,
+    show: options.tray !== 'start-in-tray'
   }, DEFAULT_WINDOW_OPTIONS));
 
   mainWindowState.manage(mainWindow);
@@ -4786,8 +4803,8 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
       type: 'warning',
       buttons: ['Yes', 'Cancel'],
       defaultId: 1,
-      title: 'Clear cache confirmation',
-      message: 'This will clear all data (cookies, local storage etc) from this app. Are you sure you wish to proceed?'
+      title: 'Flush App Cache',
+      message: 'This will absolute delete all data (cookies, web cache, local storage, gpu cache, etc) from this app. Are you sure you wish to proceed?'
     }, function (response) {
       if (response !== 0) {
         return;
@@ -6929,7 +6946,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _electron2 = __webpack_require__(18);
+var _electron = __webpack_require__(18);
 
 /**
  * @param golemVersion
@@ -6957,7 +6974,7 @@ function createMenu(_ref) {
       clearAppData = _ref.clearAppData,
       disableDevTools = _ref.disableDevTools;
 
-  if (_electron2.Menu.getApplicationMenu()) {
+  if (_electron.Menu.getApplicationMenu()) {
     return;
   }
   var zoomResetLabel = zoomBuildTimeValue === 1.0 ? 'Reset Zoom' : `Reset Zoom (to ${zoomBuildTimeValue * 100}%, set at build time)`;
@@ -7007,7 +7024,7 @@ function createMenu(_ref) {
       accelerator: 'CmdOrCtrl+L',
       click: function click() {
         var currentURL = getCurrentUrl();
-        _electron2._electron.clipboard.writeText(currentURL);
+        _electron.clipboard.writeText(currentURL);
       }
     }, {
       label: 'Paste',
@@ -7021,6 +7038,11 @@ function createMenu(_ref) {
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
       role: 'selectall'
+    }, {
+      label: 'Clear App Data',
+      click: function click() {
+        clearAppData();
+      }
     }]
   }, {
     label: 'View',
@@ -7038,6 +7060,19 @@ function createMenu(_ref) {
       }
     }, {
       type: 'separator'
+    }, {
+      label: 'Toggle Full Screen',
+      accelerator: function () {
+        if (process.platform === 'darwin') {
+          return 'Ctrl+Command+F';
+        }
+        return 'F11';
+      }(),
+      click: function click(item, focusedWindow) {
+        if (focusedWindow) {
+          focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+        }
+      }
     }, {
       label: 'Zoom In',
       accelerator: function () {
@@ -7072,16 +7107,16 @@ function createMenu(_ref) {
         zoomReset();
       }
     }, {
-      label: 'Toggle Full Screen',
+      label: 'Toggle Developer Tools',
       accelerator: function () {
         if (process.platform === 'darwin') {
-          return 'Ctrl+Command+F';
+          return 'Alt+Command+I';
         }
-        return 'F11';
+        return 'Ctrl+Shift+I';
       }(),
       click: function click(item, focusedWindow) {
         if (focusedWindow) {
-          focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+          focusedWindow.toggleDevTools();
         }
       }
     }]
@@ -7098,24 +7133,24 @@ function createMenu(_ref) {
     submenu: [{
       label: `GOLEM Engine v${golemVersion}`,
       click: function click() {
-        _electron2._electron.shell.openExternal('https://github.com/loouislow81/golem#README.md');
+        _electron.shell.openExternal('https://github.com/loouislow81/golem-sdk');
       }
     }, {
       label: 'Report an Issue',
       click: function click() {
-        _electron2._electron.shell.openExternal('https://github.com/loouislow81/golem/issues');
+        _electron.shell.openExternal('https://github.com/loouislow81/golem-sdk/issues');
       }
     }, {
       type: 'separator'
     }, {
-      label: 'Get GOLEM AppStore',
+      label: 'Get GOLEM Desktop',
       click: function click() {
-        _electron2._electron.shell.openExternal('https://github.com/loouislow81/golem-appstore');
+        _electron.shell.openExternal('https://github.com/loouislow81/golem-appstore');
       }
     }, {
       label: 'Get GOLEM CLI',
       click: function click() {
-        _electron2._electron.shell.openExternal('https://github.com/loouislow81/golem-cli');
+        _electron.shell.openExternal('https://github.com/loouislow81/golem-cli');
       }
     }]
   }];
@@ -7165,8 +7200,8 @@ function createMenu(_ref) {
     });
   }
 
-  var menu = _electron2.Menu.buildFromTemplate(template);
-  _electron2.Menu.setApplicationMenu(menu);
+  var menu = _electron.Menu.buildFromTemplate(template);
+  _electron.Menu.setApplicationMenu(menu);
 }
 
 exports.default = createMenu;

@@ -273,3 +273,4 @@ golem(options, (error, appPath) => {
   console.log(appName + ' app has moved to to >>', appPath)
 })
 ```
+

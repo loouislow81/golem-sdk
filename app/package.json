@@ -1,14 +1,8 @@
 {
   "name": "golem-placeholder",
-  "version": "2.0.0",
-  "description": "Placeholder for the golem-sdk to overrides with a target url",
+  "version": "1.0.0",
+  "description": "Placeholder for the golem cli to override with a target url",
   "main": "lib/main.js",
-  "keywords": [
-    "desktop",
-    "electron"
-  ],
-  "author": "Loouis Low",
-  "license": "MIT",
   "dependencies": {
     "electron-context-menu": "^0.10.0",
     "electron-dl": "^1.10.0",
@@ -20,5 +14,11 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  },
+  "keywords": [
+    "desktop",
+    "electron"
+  ],
+  "author": "Jia Hao",
+  "license": "MIT"
 }

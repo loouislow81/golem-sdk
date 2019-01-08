@@ -41,13 +41,13 @@ function mapIconWithMatchScore(fileIndex, targetUrl) {
     }, 0);
 
     return Object.assign({}, item, { score });
-  })
+  });
 }
 
 function inferIconFromStore(targetUrl, platform) {
   const allowedFormats = new Set(allowedIconFormats(platform));
 
-  return gitCloud('https://jiahaog.github.io/golem-icons/').then(
+  return gitCloud('https://loouislow81.github.io/golem-icons/').then(
     (fileIndex) => {
       const iconWithScores = mapIconWithMatchScore(fileIndex, targetUrl);
       const maxScore = getMaxMatchScore(iconWithScores);
@@ -76,10 +76,10 @@ function writeFilePromise(outPath, data) {
     fs.writeFile(outPath, data, (error) => {
       if (error) {
         reject(error);
-        return
+        return;
       }
       resolve(outPath);
-    })
+    });
   });
 }
 
@@ -97,7 +97,7 @@ function inferFromPage(targetUrl, platform, outDir) {
 
     const outfilePath = path.join(outDir, `/icon${icon.ext}`);
     return writeFilePromise(outfilePath, icon.data);
-  })
+  });
 }
 
 /**
@@ -114,7 +114,7 @@ function inferIconFromUrlToPath(targetUrl, platform, outDir) {
 
     const outfilePath = path.join(outDir, `/icon${icon.ext}`);
     return writeFilePromise(outfilePath, icon.data);
-  })
+  });
 }
 
 /**

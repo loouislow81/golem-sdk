@@ -38,7 +38,7 @@ class DishonestProgress {
       this.bar.tick(this.tickParts, {
         task: message,
       });
-      return
+      return;
     }
 
     this.bar.tick({
@@ -56,7 +56,7 @@ class DishonestProgress {
     this.tickingPrevious.interval = setInterval(() => {
       if (this.tickingPrevious.remainder === 1) {
         clearInterval(this.tickingPrevious.interval);
-        return
+        return;
       }
 
       this.bar.tick({

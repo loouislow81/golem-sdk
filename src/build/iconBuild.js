@@ -1,11 +1,3 @@
-/**
- * @file: src/build/iconBuild.js
- * @description:
- * @license: MIT
- * @author: Loouis Low <loouis@gmail.com>
- * @copyright: Loouis Low (https://github.com/loouislow81/golem-sdk)
- */
-
 import path from 'path';
 import log from 'loglevel';
 import helpers from '../helpers/helpers';
@@ -43,17 +35,17 @@ function iconBuild(inpOptions, callback) {
   const options = Object.assign({}, inpOptions);
   const returnCallback = () => {
     callback(null, options);
-  }
+  };
 
   if (!options.icon) {
     returnCallback();
-    return
+    return;
   }
 
   if (options.platform === 'win32') {
     if (iconIsIco(options.icon)) {
       returnCallback();
-      return
+      return;
     }
 
     convertToIco(options.icon)
@@ -64,14 +56,14 @@ function iconBuild(inpOptions, callback) {
       .catch((error) => {
         log.warn('Skipping icon conversion to .ico', error);
         returnCallback();
-      })
-    return
+      });
+    return;
   }
 
   if (options.platform === 'linux') {
     if (iconIsPng(options.icon)) {
       returnCallback();
-      return
+      return;
     }
 
     convertToPng(options.icon)
@@ -82,21 +74,21 @@ function iconBuild(inpOptions, callback) {
       .catch((error) => {
         log.warn('Skipping icon conversion to .png', error);
         returnCallback();
-      })
-    return
+      });
+    return;
   }
 
   if (iconIsIcns(options.icon)) {
     returnCallback();
-    return
+    return;
   }
 
   if (!isOSX()) {
     log.warn(
       'Skipping icon conversion to .icns, conversion is only supported on OSX',
-    )
+    );
     returnCallback();
-    return
+    return;
   }
 
   convertToIcns(options.icon)
@@ -108,7 +100,7 @@ function iconBuild(inpOptions, callback) {
       log.warn('Skipping icon conversion to .icns', error);
       options.icon = undefined;
       returnCallback();
-    })
+    });
 }
 
 export default iconBuild;

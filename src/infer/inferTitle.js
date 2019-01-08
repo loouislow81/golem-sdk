@@ -9,7 +9,7 @@ function inferTitle(url) {
     method: 'get',
     url,
     headers: {
-      // fake a user agent
+      // fake a user agent because pages like http://messenger.com will throw 404 error
       'User-Agent': USER_AGENT,
     },
   };
@@ -19,7 +19,7 @@ function inferTitle(url) {
     return $('title')
       .first()
       .text();
-  })
+  });
 }
 
 export default inferTitle;

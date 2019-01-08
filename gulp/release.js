@@ -6,6 +6,6 @@ const { shellExec } = helpers;
 
 gulp.task('publish', (done) => {
   shellExec('npm publish', false, done);
-})
+});
 
 gulp.task('release', (callback) => runSequence('build', 'publish', callback));

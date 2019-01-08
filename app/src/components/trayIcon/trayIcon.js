@@ -41,11 +41,11 @@ function createTrayIcon(inpOptions, mainWindow) {
 
     mainWindow.on('show', () => {
       appIcon.setHighlightMode('always');
-    })
+    });
 
     mainWindow.on('hide', () => {
       appIcon.setHighlightMode('never');
-    })
+    });
 
     if (options.counter) {
       mainWindow.on('page-title-updated', (e, title) => {
@@ -62,11 +62,11 @@ function createTrayIcon(inpOptions, mainWindow) {
           return;
         }
         appIcon.setToolTip(`•  ${options.name}`);
-      })
+      });
 
       mainWindow.on('focus', () => {
         appIcon.setToolTip(options.name);
-      })
+      });
     }
 
     appIcon.setToolTip(options.name);

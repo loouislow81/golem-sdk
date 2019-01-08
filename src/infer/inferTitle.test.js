@@ -18,4 +18,4 @@ test('it returns the correct title', async () => {
   const result = await inferTitle('someurl');
   expect(axios).toHaveBeenCalledTimes(1);
   expect(result).toBe('TEST_TITLE');
-})
+});

@@ -19,25 +19,25 @@ describe('well formed name parameters', () => {
 
     expect(inferTitle).toHaveBeenCalledTimes(0);
     expect(result).toBe(params.name);
-  })
+  });
 
   test('it should call sanitize filename', async () => {
     const result = await name(params);
     expect(sanitizeFilename).toHaveBeenCalledWith(params.platform, result);
-  })
+  });
 });
 
 describe('bad name parameters', () => {
   beforeEach(() => {
     inferTitle.mockImplementationOnce(() => Promise.resolve(mockedResult));
-  })
+  });
 
   const params = { targetUrl: 'some url' };
   describe('when the name is undefined', () => {
     test('it should call inferTitle', async () => {
       await name(params);
       expect(inferTitle).toHaveBeenCalledWith(params.targetUrl);
-    })
+    });
   });
 
   describe('when the name is an empty string', () => {
@@ -49,14 +49,14 @@ describe('bad name parameters', () => {
 
       await name(testParams);
       expect(inferTitle).toHaveBeenCalledWith(params.targetUrl);
-    })
+    });
   });
 
   test('it should call sanitize filename', () =>
     name(params).then((result) => {
       expect(sanitizeFilename).toHaveBeenCalledWith(params.platform, result);
     }));
-})
+});
 
 describe('handling inferTitle results', () => {
   const params = { targetUrl: 'some url', name: '', platform: 'something' };
@@ -66,7 +66,7 @@ describe('handling inferTitle results', () => {
     const result = await name(params);
     expect(result).toBe(mockedResult);
     expect(inferTitle).toHaveBeenCalledWith(params.targetUrl);
-  })
+  });
 
   describe('when the returned pageTitle is falsey', () => {
     test('it should return the default app name', async () => {
@@ -75,7 +75,7 @@ describe('handling inferTitle results', () => {
       const result = await name(params);
       expect(result).toBe(DEFAULT_APP_NAME);
       expect(inferTitle).toHaveBeenCalledWith(params.targetUrl);
-    })
+    });
   });
 
   describe('when inferTitle resolves with an error', () => {
@@ -88,6 +88,6 @@ describe('handling inferTitle results', () => {
       expect(result).toBe(DEFAULT_APP_NAME);
       expect(inferTitle).toHaveBeenCalledWith(params.targetUrl);
       expect(log.warn).toHaveBeenCalledTimes(1);
-    })
+    });
   });
-})
+});

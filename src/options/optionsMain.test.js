@@ -12,6 +12,6 @@ test('it should call the async config', async () => {
   const result = await optionsMain(params);
   expect(asyncConfig).toHaveBeenCalledWith(expect.objectContaining(params));
   expect(result).toEqual(mockedAsyncConfig);
-})
+});
 
 // TODO add more tests

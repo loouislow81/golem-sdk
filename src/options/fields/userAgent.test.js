@@ -8,7 +8,7 @@ test('when a userAgent parameter is passed', async () => {
 
   const params = { userAgent: 'valid user agent' };
   await expect(userAgent(params)).resolves.toBe(params.userAgent);
-})
+});
 
 test('no userAgent parameter is passed', async () => {
   const params = { electronVersion: '123', platform: 'mac' };
@@ -17,4 +17,4 @@ test('no userAgent parameter is passed', async () => {
     params.electronVersion,
     params.platform,
   );
-})
+});

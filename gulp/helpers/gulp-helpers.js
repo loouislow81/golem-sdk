@@ -7,10 +7,10 @@ function shellExec(cmd, silent, callback) {
   shellJs.exec(cmd, { silent }, (code, stdout, stderr) => {
     if (code) {
       callback(JSON.stringify({ code, stdout, stderr }));
-      return
+      return;
     }
     callback();
-  })
+  });
 }
 
 function buildES6(src, dest, callback) {

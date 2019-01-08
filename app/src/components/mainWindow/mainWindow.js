@@ -42,22 +42,26 @@ function maybeInjectCss(browserWindow) {
 
   const injectCss = () => {
     browserWindow.webContents.insertCSS(cssToInject);
-  }
+  };
+  const onHeadersReceived = (details, callback) => {
+    injectCss();
+    callback({ cancel: false, responseHeaders: details.responseHeaders });
+  };
 
   browserWindow.webContents.on('did-finish-load', () => {
     // remove the injection of css the moment the page is loaded
-    browserWindow.webContents.removeListener(
-      'did-get-response-details',
-      injectCss,
-    );
-  })
+    browserWindow.webContents.session.webRequest.onHeadersReceived(null);
+  });
 
   // on every page navigation inject the css
   browserWindow.webContents.on('did-navigate', () => {
-    // we have to inject the css in did-get-response-details to prevent the fouc
-    // will run multiple times
-    browserWindow.webContents.on('did-get-response-details', injectCss);
-  })
+    // we have to inject the css in onHeadersReceived so they're early enough
+    // will run multiple times, so did-finish-load will remove this handler
+    browserWindow.webContents.session.webRequest.onHeadersReceived(
+      [], // Pass an empty filter list; null will not match _any_ urls
+      onHeadersReceived,
+    );
+  });
 }
 
 /**
@@ -109,6 +113,7 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
         // Whether the window should always stay on top of other windows. Default is false.
         alwaysOnTop: options.alwaysOnTop,
         titleBarStyle: options.titleBarStyle,
+        show: options.tray !== 'start-in-tray',
       },
       DEFAULT_WINDOW_OPTIONS,
     ),
@@ -132,31 +137,31 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
       return block(focusedWindow);
     }
     return undefined;
-  }
+  };
 
   const adjustWindowZoom = (window, adjustment) => {
     window.webContents.getZoomFactor((zoomFactor) => {
       window.webContents.setZoomFactor(zoomFactor + adjustment);
-    })
-  }
+    });
+  };
 
   const onZoomIn = () => {
     withFocusedWindow((focusedWindow) =>
       adjustWindowZoom(focusedWindow, ZOOM_INTERVAL),
     );
-  }
+  };
 
   const onZoomOut = () => {
     withFocusedWindow((focusedWindow) =>
       adjustWindowZoom(focusedWindow, -ZOOM_INTERVAL),
     );
-  }
+  };
 
   const onZoomReset = () => {
     withFocusedWindow((focusedWindow) => {
       focusedWindow.webContents.setZoomFactor(options.zoom);
-    })
-  }
+    });
+  };
 
   const clearAppData = () => {
     dialog.showMessageBox(
@@ -165,9 +170,9 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
         type: 'warning',
         buttons: ['Yes', 'Cancel'],
         defaultId: 1,
-        title: 'Clear cache confirmation',
+        title: 'Flush App Cache',
         message:
-          'This will clear all data (cookies, local storage etc) from this app. Are you sure you wish to proceed?',
+          'This will absolute delete all data (cookies, web cache, local storage, gpu cache, etc) from this app. Are you sure you wish to proceed?',
       },
       (response) => {
         if (response !== 0) {
@@ -177,23 +182,23 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
         session.clearStorageData(() => {
           session.clearCache(() => {
             mainWindow.loadURL(options.targetUrl);
-          })
+          });
         });
       },
     );
-  }
+  };
 
   const onGoBack = () => {
     withFocusedWindow((focusedWindow) => {
       focusedWindow.webContents.goBack();
-    })
-  }
+    });
+  };
 
   const onGoForward = () => {
     withFocusedWindow((focusedWindow) => {
       focusedWindow.webContents.goForward();
-    })
-  }
+    });
+  };
 
   const getCurrentUrl = () =>
     withFocusedWindow((focusedWindow) => focusedWindow.webContents.getURL());
@@ -215,9 +220,9 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
         focusedWindow.focus();
       }
       return newTab;
-    })
+    });
     return undefined;
-  }
+  };
 
   const createAboutBlankWindow = () => {
     const window = createNewWindow('about:blank');
@@ -230,7 +235,7 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
       }
     });
     return window;
-  }
+  };
 
   const onNewWindow = (event, urlToGo, _, disposition) => {
     const preventDefault = (newGuest) => {
@@ -251,13 +256,13 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
       nativeTabsSupported,
       createNewTab,
     );
-  }
+  };
 
   const sendParamsOnDidFinishLoad = (window) => {
     window.webContents.on('did-finish-load', () => {
       window.webContents.send('params', JSON.stringify(options));
-    })
-  }
+    });
+  };
 
   createNewWindow = (url) => {
     const window = new BrowserWindow(DEFAULT_WINDOW_OPTIONS);
@@ -270,7 +275,7 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
     window.webContents.on('will-navigate', onWillNavigate);
     window.loadURL(url);
     return window;
-  }
+  };
 
   const menuOptions = {
     golemVersion: options.golemVersion,
@@ -316,15 +321,15 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
         return;
       }
       setDockBadge('•', options.bounce);
-    })
+    });
     mainWindow.on('focus', () => {
       setDockBadge('');
-    })
+    });
   }
 
   ipcMain.on('notification-click', () => {
     mainWindow.show();
-  })
+  });
 
   mainWindow.webContents.on('new-window', onNewWindow);
   mainWindow.webContents.on('will-navigate', onWillNavigate);
@@ -345,7 +350,7 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
       );
     }
     maybeHideWindow(mainWindow, event, options.fastQuit, options.tray);
-  })
+  });
 
   return mainWindow;
 }

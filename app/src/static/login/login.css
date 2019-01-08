@@ -1,5 +1,4 @@
-label,
-input {
+label, input {
   display: block;
 }
 
@@ -7,23 +6,11 @@ input {
   font-family: Verdana, sans-serif;
 }
 
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
-  color: #ffffff;
   -webkit-app-region: drag;
-  background: rgba(243, 59, 69, 1.0);
-  background: -webkit-linear-gradient(top left, rgba(243, 59, 69, 1.0), rgba(246, 118, 27, 1.0));
-  background: -moz-linear-gradient(top left, rgba(243, 59, 69, 1.0), rgba(246, 118, 27, 1.0));
-  background: linear-gradient(top left, rgba(243, 59, 69, 1.0), rgba(246, 118, 27, 1.0));
 }
-
-.logo {
-  height: 100px;
-  width: auto;
-}
-
 .login-form {
   height: 100%;
   display: flex;
@@ -32,52 +19,39 @@ body {
   align-items: center;
 }
 
-.login-form> div {
+.login-form > div {
   margin-bottom: 30px;
 }
 
-.login-form> div> label {
-  margin-bottom: 10px;
-  letter-spacing: 2px;
+.login-form > div > label {
+  margin-bottom: 25px;
+  letter-spacing: 5px;
   font-weight: 100;
-  font-size: 16px;
+  text-transform: uppercase;
+  font-size: 18px;
   text-align: center;
-  color: #fff;
+  color: rgba(0, 0, 0, 0.7);
 }
 
-.login-form> div> input {
-  height: 40px;
-  width: 200px;
-  color: #ffffff;
-  padding: 0 10px 0 10px;
-  background: #504d4d;
+.login-form > div > input {
+  height: 30px;
+  width: 225px;
   font-size: 16px;
-  border: 0px solid #ffffff;
-  border-radius: 30px;
   -webkit-app-region: no-drag;
 }
 
-.login-form> div> input:hover {
-  background: #ffffff40;
-}
-
-.login-form> div> button {
+.login-form > div > button {
   border: 0;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 100;
   text-transform: uppercase;
   height: 35px;
-  font-family: arial;
-  width: 220px;
-  height: 45px;
-  border-radius: 30px;
-  background-color: #e0e0e0;
-  color: #424242;
-  cursor: pointer;
+  width: 225px;
+  background-color: #2196F3;
+  color: white;
   -webkit-app-region: no-drag;
 }
 
-.login-form> div> button:hover {
-  background-color: #fff;
-  border: 3px solid #bbbbbb4f;
+button:hover {
+  background-color: #0D47A1;
 }

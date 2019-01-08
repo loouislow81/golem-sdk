@@ -1,11 +1,3 @@
-/**
- * @file: src/build/buildApp.js
- * @description:
- * @license: MIT
- * @author: Loouis Low <loouis@gmail.com>
- * @copyright: Loouis Low (https://github.com/loouislow81/golem-sdk)
- */
-
 import fs from 'fs';
 import crypto from 'crypto';
 import _ from 'lodash';
@@ -14,7 +6,6 @@ import ncp from 'ncp';
 
 const copy = ncp.ncp;
 const log = require('loglevel');
-
 /**
  * Only picks certain app args to pass to golem.json
  * @param options
@@ -65,6 +56,7 @@ function selectAppArgs(options) {
     basicAuthPassword: options.basicAuthPassword,
     alwaysOnTop: options.alwaysOnTop,
     titleBarStyle: options.titleBarStyle,
+    globalShortcuts: options.globalShortcuts,
   };
 }
 
@@ -72,14 +64,14 @@ function maybeCopyScripts(srcs, dest) {
   if (!srcs) {
     return new Promise((resolve) => {
       resolve();
-    })
+    });
   }
   const promises = srcs.map(
     (src) =>
       new Promise((resolve, reject) => {
         if (!fs.existsSync(src)) {
           reject(new Error('Error copying injection files: file not found'));
-          return
+          return;
         }
 
         let destFileName;
@@ -95,10 +87,10 @@ function maybeCopyScripts(srcs, dest) {
         copy(src, path.join(dest, 'inject', destFileName), (error) => {
           if (error) {
             reject(new Error(`Error Copying injection files: ${error}`));
-            return
+            return;
           }
           resolve();
-        })
+        });
       }),
   );
 
@@ -109,7 +101,7 @@ function maybeCopyScripts(srcs, dest) {
       })
       .catch((error) => {
         reject(error);
-      })
+      });
   });
 }
 
@@ -143,7 +135,7 @@ function buildApp(src, dest, options, callback) {
   copy(src, dest, (error) => {
     if (error) {
       callback(`Error Copying temporary directory: ${error}`);
-      return
+      return;
     }
 
     fs.writeFileSync(path.join(dest, '/golem.json'), JSON.stringify(appArgs));
@@ -155,7 +147,7 @@ function buildApp(src, dest, options, callback) {
       .then(() => {
         changeAppPackageJsonName(dest, appArgs.name, appArgs.targetUrl);
         callback();
-      })
+      });
   });
 }
 

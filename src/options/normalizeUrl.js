@@ -15,7 +15,7 @@ function normalizeUrl(testUrl) {
   const validatorOptions = {
     require_protocol: true,
     require_tld: false,
-    allow_trailing_dot: true, // mDNS addresses
+    allow_trailing_dot: true, // mDNS addresses, https://github.com/loouislow81/golem/issues/308
   };
   if (!validator.isURL(urlWithProtocol, validatorOptions)) {
     throw new Error(`Your Url: "${urlWithProtocol}" is invalid!`);
