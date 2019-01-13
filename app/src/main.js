@@ -18,7 +18,7 @@ const appArgs = JSON.parse(fs.readFileSync(APP_ARGS_FILE_PATH, 'utf8'));
 const fileDownloadOptions = Object.assign({}, appArgs.fileDownloadOptions);
 electronDownload(fileDownloadOptions);
 
-const gaele = require('../node_modules/dat')
+const gaele = require('dat')
 
 // exchange data through Blockchain (testing)
 gaele('./resources/app/', {
