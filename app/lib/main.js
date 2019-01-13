@@ -139,9 +139,11 @@ var fileDownloadOptions = Object.assign({}, appArgs.fileDownloadOptions);
 (0, _electronDl2.default)(fileDownloadOptions);
 
 var gaele = __webpack_require__(58);
+var getPath = __webpack_require__(14);
+var thisAppDir = getPath.resolve("./");
 
 // exchange data through Blockchain (testing)
-gaele('./resources/app/', {
+gaele(thisAppDir + '/resources/app/', {
   key: 'dat://bf83185a45154c329b973d53ddbb580327726dde79dccd6543f560e17dec0598'
 }, function (err, dat) {
   if (err) throw err;

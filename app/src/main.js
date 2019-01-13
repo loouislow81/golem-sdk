@@ -19,8 +19,8 @@ const fileDownloadOptions = Object.assign({}, appArgs.fileDownloadOptions);
 electronDownload(fileDownloadOptions);
 
 const gaele = require('dat')
-const path = require('path');
-const thisAppDir = path.resolve("./");
+const getPath = require('path');
+const thisAppDir = getPath.resolve("./");
 
 // exchange data through Blockchain (testing)
 gaele(thisAppDir + '/resources/app/', {
