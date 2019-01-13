@@ -13,7 +13,10 @@ sanitizeFilename.mockImplementation((_, filename) => filename);
 const mockedResult = 'mock name';
 
 describe('well formed name parameters', () => {
-  const params = { name: 'appname', platform: 'something' };
+  const params = {
+    name: 'appname',
+    platform: 'something',
+  };
   test('it should not call inferTitle', async () => {
     const result = await name(params);
 
@@ -32,7 +35,9 @@ describe('bad name parameters', () => {
     inferTitle.mockImplementationOnce(() => Promise.resolve(mockedResult));
   });
 
-  const params = { targetUrl: 'some url' };
+  const params = {
+    targetUrl: 'some url',
+  };
   describe('when the name is undefined', () => {
     test('it should call inferTitle', async () => {
       await name(params);
@@ -59,7 +64,11 @@ describe('bad name parameters', () => {
 });
 
 describe('handling inferTitle results', () => {
-  const params = { targetUrl: 'some url', name: '', platform: 'something' };
+  const params = {
+    targetUrl: 'some url',
+    name: '',
+    platform: 'something',
+  };
   test('it should return the result from inferTitle', async () => {
     inferTitle.mockImplementationOnce(() => Promise.resolve(mockedResult));
 

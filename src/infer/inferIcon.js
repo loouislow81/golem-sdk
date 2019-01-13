@@ -26,7 +26,11 @@ function getMaxMatchScore(iconWithScores) {
 function getMatchingIcons(iconsWithScores, maxScore) {
   return iconsWithScores
     .filter((item) => item.score === maxScore)
-    .map((item) => Object.assign({}, item, { ext: path.extname(item.url) }));
+    .map((item) =>
+      Object.assign({}, item, {
+        ext: path.extname(item.url),
+      }),
+    );
 }
 
 function mapIconWithMatchScore(fileIndex, targetUrl) {
@@ -40,7 +44,9 @@ function mapIconWithMatchScore(fileIndex, targetUrl) {
       return currentScore;
     }, 0);
 
-    return Object.assign({}, item, { score });
+    return Object.assign({}, item, {
+      score,
+    });
   });
 }
 
@@ -90,7 +96,9 @@ function inferFromPage(targetUrl, platform, outDir) {
   }
 
   // todo might want to pass list of preferences instead
-  return pageIcon(targetUrl, { ext: preferredExt }).then((icon) => {
+  return pageIcon(targetUrl, {
+    ext: preferredExt,
+  }).then((icon) => {
     if (!icon) {
       return null;
     }
@@ -122,7 +130,9 @@ function inferIconFromUrlToPath(targetUrl, platform, outDir) {
  * @param {string} platform
  */
 function inferIcon(targetUrl, platform) {
-  const tmpObj = tmp.dirSync({ unsafeCleanup: true });
+  const tmpObj = tmp.dirSync({
+    unsafeCleanup: true,
+  });
   const tmpPath = tmpObj.name;
   return inferIconFromUrlToPath(targetUrl, platform, tmpPath);
 }

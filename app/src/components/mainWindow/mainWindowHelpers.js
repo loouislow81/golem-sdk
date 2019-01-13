@@ -11,7 +11,7 @@ function onNewWindowHelper(
   openExternal,
   createAboutBlankWindow,
   nativeTabsSupported,
-  createNewTab
+  createNewTab,
 ) {
   if (!linkIsInternal(targetUrl, urlToGo, internalUrls)) {
     openExternal(urlToGo);

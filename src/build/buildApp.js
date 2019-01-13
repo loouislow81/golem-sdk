@@ -109,7 +109,7 @@ function normalizeAppName(appName, url) {
   // use a simple 3 byte random string to prevent collision
   const hash = crypto.createHash('md5');
   hash.update(url);
-  const postFixHash = hash.digest('hex').substring(0, 6);
+  const postFixHash = hash.digest('hex').substring(0, 6); // 6 chars hash string
   const normalized = _.kebabCase(appName.toLowerCase());
   return `${normalized}-golem-${postFixHash}`;
 }

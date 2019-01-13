@@ -207,7 +207,7 @@ function createMenu({
           label: 'Report an Issue',
           click: () => {
             shell.openExternal(
-              'https://github.com/loouislow81/golem-sdk/issues'
+              'https://github.com/loouislow81/golem-sdk/issues',
             );
           },
         },

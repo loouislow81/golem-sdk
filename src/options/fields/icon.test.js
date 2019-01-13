@@ -11,7 +11,9 @@ describe('when the icon parameter is passed', () => {
   test('it should return the icon parameter', async () => {
     expect(inferIcon).toHaveBeenCalledTimes(0);
 
-    const params = { icon: './icon.png' };
+    const params = {
+      icon: './icon.png',
+    };
     await expect(icon(params)).resolves.toBe(params.icon);
   });
 });
@@ -19,7 +21,10 @@ describe('when the icon parameter is passed', () => {
 describe('when the icon parameter is not passed', () => {
   test('it should call inferIcon', async () => {
     inferIcon.mockImplementationOnce(() => Promise.resolve(mockedResult));
-    const params = { targetUrl: 'some url', platform: 'mac' };
+    const params = {
+      targetUrl: 'some url',
+      platform: 'mac',
+    };
 
     const result = await icon(params);
 
@@ -32,7 +37,10 @@ describe('when the icon parameter is not passed', () => {
       inferIcon.mockImplementationOnce(() =>
         Promise.reject(new Error('some error')),
       );
-      const params = { targetUrl: 'some url', platform: 'mac' };
+      const params = {
+        targetUrl: 'some url',
+        platform: 'mac',
+      };
 
       const result = await icon(params);
       expect(result).toBe(null);

@@ -160,7 +160,10 @@ function buildMain(inpOptions, callback) {
   const options = Object.assign({}, inpOptions);
 
   // pre process app
-  const tmpObj = tmp.dirSync({ mode: '0755', unsafeCleanup: true });
+  const tmpObj = tmp.dirSync({
+    mode: '0755',
+    unsafeCleanup: true,
+  });
   const tmpPath = tmpObj.name;
 
   // todo check if this is still needed on later version of packager

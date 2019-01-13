@@ -232,7 +232,7 @@ if (require.main === module) {
     )
     .option(
       '--global-shortcuts <value>',
-      'JSON file with global shortcut configuration. See https://github.com/loouislow81/golem-sdk/blob/master/docs/api.md#global-shortcuts',
+      'JSON file with global shortcut configuration.',
     )
     .parse(sanitizedArgs);
 
