@@ -1,47 +1,56 @@
 /*gpu accelerated*/
 
 body {
-  -webkit-font-smoothing: antialiased;
-  -webkit-overflow-scrolling: touch;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased !important;
+  -webkit-overflow-scrolling: touch !important;
+  text-rendering: optimizeLegibility !important;
+  scroll-behavior: smooth !important;
 }
+
 
 /*add fade fx for image*/
-img, img:before, img:after {
-  -webkit-animation-name: fadeIn;
-  -webkit-animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-name: fadeIn;
-  animation-duration: 1s;
-  animation-fill-mode: both;
+
+img,
+img:before,
+img:after {
+  -webkit-animation-name: fadeIn !important;
+  -webkit-animation-duration: 1s !important;
+  -webkit-animation-fill-mode: both !important;
+  animation-name: fadeIn !important;
+  animation-duration: 1s !important;
+  animation-fill-mode: both !important;
 }
 
+
 /*double-enhancer*/
+
+
 /* ( default + luminosity ) = overlay */
 
 img,
 video,
 embed {
-  -webkit-filter: saturate(1.36) contrast(1.15) brightness(1) blur(0px);
-  mix-blend-mode: default;
+  -webkit-filter: saturate(1.36) contrast(1.15) brightness(1) blur(0px) !important;
+  mix-blend-mode: default !important;
 }
 
 img::before,
 video::before,
 embed::before {
-  -webkit-filter: saturate(1.36) contrast(1.15) brightness(1.01) blur(0px);
-  mix-blend-mode: luminosity;
+  -webkit-filter: saturate(1.36) contrast(1.15) brightness(1.01) blur(0px) !important;
+  mix-blend-mode: luminosity !important;
 }
 
 img::after,
 video::after,
 embed::after {
-  -webkit-filter: saturate(1.36) contrast(1.2) brightness(1.01) blur(0px);
-  mix-blend-mode: overlay;
+  -webkit-filter: saturate(1.36) contrast(1.2) brightness(1.01) blur(0px) !important;
+  mix-blend-mode: overlay !important;
 }
 
+
 /*slimming scrollbar*/
+
 @media (max-width: 683px) {
   ::-webkit-scrollbar {
     width: 10px;
@@ -132,12 +141,13 @@ embed::after {
   }
 }
 
+
 /*fade FX*/
+
 @-webkit-keyframes fadeIn {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -147,7 +157,6 @@ embed::after {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
