@@ -19,6 +19,14 @@ $ sudo npm i -g n
 $ sudo n stable
 ```
 
+### upgrade
+
+**NOTE:** if you upgraded to latest `golem-sdk` version, you have upgrade all installed apps,
+
+```bash
+$ golem upgrade-all
+```
+
 ---
 
 ### flash Plugin
