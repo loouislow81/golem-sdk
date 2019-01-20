@@ -1,4 +1,5 @@
-label, input {
+label,
+input {
   display: block;
 }
 
@@ -6,11 +7,18 @@ label, input {
   font-family: Verdana, sans-serif;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   -webkit-app-region: drag;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  background: #3b3b3b;
 }
+
 .login-form {
   height: 100%;
   display: flex;
@@ -19,39 +27,60 @@ html, body {
   align-items: center;
 }
 
-.login-form > div {
+.login-form> div {
   margin-bottom: 30px;
 }
 
-.login-form > div > label {
+.login-form> div> label {
   margin-bottom: 25px;
-  letter-spacing: 5px;
+  letter-spacing: 15px;
   font-weight: 100;
   text-transform: uppercase;
-  font-size: 18px;
+  font-size: 13px;
   text-align: center;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.login-form > div > input {
+.login-form> div> input {
   height: 30px;
   width: 225px;
-  font-size: 16px;
+  font-size: 20px;
+  border-radius: 30px;
+  color: #262626;
+  border: 5px solid #464545;
+  padding: 5px 10px 5px 10px;
   -webkit-app-region: no-drag;
+  transition-timing-function: ease-in;
+  transition: 0.2s;
+  transform: translateY(5%);
 }
 
-.login-form > div > button {
+.login-form> div> input:hover {
+  border: 5px solid #fff;
+  transition-timing-function: ease-out;
+  transition: 0.25s;
+  transform: translateY(0);
+}
+
+.login-form> div> button {
   border: 0;
-  font-size: 15px;
-  font-weight: 100;
+  font-size: 16px;
+  font-weight: 700;
   text-transform: uppercase;
-  height: 35px;
-  width: 225px;
-  background-color: #2196F3;
+  height: 40px;
+  width: 250px;
+  background-color: #292929;
   color: white;
+  border-radius: 30px;
   -webkit-app-region: no-drag;
+  transition-timing-function: ease-in;
+  transition: 0.2s;
+  transform: translateY(5%);
 }
 
-button:hover {
-  background-color: #0D47A1;
+.login-form> div> button:hover {
+  background-color: #2196F3;
+  transition-timing-function: ease-out;
+  transition: 0.25s;
+  transform: translateY(0);
 }
