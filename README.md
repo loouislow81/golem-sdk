@@ -282,3 +282,10 @@ golem(options, (error, appPath) => {
 })
 ```
 
+#### _upgrade
+
+**(!!)** Whenever you upgraded to latest `golem-sdk`, you should upgrade all installed apps with,
+
+```bash
+$ golem upgrade-all
+```
