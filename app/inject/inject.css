@@ -44,6 +44,7 @@ embed::after {
 /*slimming scrollbar*/
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: rgba(168, 168, 168, 0.25);
@@ -76,5 +77,51 @@ embed::after {
 
   to {
     opacity: 1;
+  }
+}
+
+/*small:half-screen*/
+@media (max-width: calc(1366px / 2)) {
+  /*facebook:no horz scroll*/
+  body.hasLeftCol,
+  body._4lh.timelineLayout {
+    overflow-x: hidden !important;
+  }
+  /*facebook:hide right panes*/
+  ._5rzs ._5v6d ._2zam,
+  .home_right_column,
+  #pagelet_rhc_footer {
+    display: none !important;
+  }
+  /*facebook:overrides contentArea*/
+  #contentArea {
+    width: 460px !important;
+    overflow: hidden !important;
+  }
+  /*facebook:overrides sideNav*/
+  #sideNav {
+    padding: 0 0 0 15px !important;
+  }
+  /*facebook: overrides content area*/
+  ._1qkq {
+    margin-left: 14px !important;
+  }
+  /*facebook: overrides timeline sidepane*/
+  ._4bl7._3-91 {
+    display: none !important;
+  }
+  /*facebook: overrides timeline centerpane*/
+  div._4bl7._3-96 {
+    padding: 0 1% !important;
+    width: 76.6% !important;
+    height: 100% !important;
+  }
+  /*facebook: overrides timeline cover*/
+  #timeline_top_section {
+    width: 78.8% !important;
+  }
+  /*facebook: overrides sticky editor timeline cover*/
+  .fbTimelineStickyHeader .stickyHeaderWrap {
+    width: 671px !important;
   }
 }
