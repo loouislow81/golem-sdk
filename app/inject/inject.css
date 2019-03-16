@@ -80,6 +80,11 @@ embed::after {
   }
 }
 
+/*to stays hidden*/
+#masthead-ad {
+  display: none !important;
+}
+
 /*small:half-screen*/
 @media (max-width: calc(1366px / 2)) {
   /*facebook:no horz scroll*/
