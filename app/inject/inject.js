@@ -1,4 +1,4 @@
-// Working demo: http://jsbin.com/ozusa6/2/
+// check internet connection
 (function () {
 
   function triggerEvent(type) {
@@ -47,7 +47,7 @@
       }
       return frag;
     }
-    // force 3D acceleration forever and ever
+    
     var fragment = create('<style>body{height:100%;width:100%;background-color:#white;text-align:center;color:#262626;font-family: arial, sans-serif;}::-webkit-scrollbar{display:none;}</style><div style="padding:25%;font-weight:normal;font-size:20px">Whoops! Internet connection lost.<br> Please check your connection.<p style="font-size:14px"><strong>GOLEM</strong> is trying to connect to server...</p></div>');
 
     document.body.insertBefore(fragment, document.body.childNodes[0]);
@@ -59,7 +59,7 @@
       triggerEvent(onLine ? 'online' : 'offline');
       lastOnLineStatus = onLine;
     }
-  }, 1000); // 5 seconds
+  }, 5000); // 5 seconds
 
 })();
 
