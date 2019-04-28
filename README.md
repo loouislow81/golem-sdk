@@ -1,4 +1,4 @@
-# golem-sdk 2.0.56
+# golem-sdk 2.0.57
 
 SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.
 
@@ -13,7 +13,7 @@ SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.
 we need NodeJS runtime,
 
 ```bash
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+$ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 $ sudo apt install -y nodejs
 $ sudo npm i -g n
 $ sudo n stable
@@ -81,6 +81,14 @@ $ golem-sdk --name duckduckgo --icon icon.png --platform linux --arch x64 --show
 ```
 
 **Note:** App that created with Golem, the app settings file is located in `/<app_name>/resources/app/golem.json`. You can change any parameters in this `golem.json` file. Read below **API** and learn how to configure your app behaviour.
+
+### troubleshoot
+
+if you run into trouble running `golem-cli`, try configure `prefix` for `node_modules`,
+
+```bash
+$ sudo npm config set prefix /usr/local/lib
+```
 
 ---
 
