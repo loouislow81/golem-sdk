@@ -1,4 +1,4 @@
-# golem-sdk 2.0.61
+# golem-sdk 2.0.62
 
 SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.
 
