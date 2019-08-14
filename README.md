@@ -1,6 +1,6 @@
 # golem-sdk 2.0.62
 
-SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.
+`golem-sdk` is a SDK for `golem-cli` to build native desktop apps for Linux (Mac, Windows).
 
 - [golem-cli](https://github.com/loouislow81/golem-cli) GOLEM app manager for Terminal.
 - [golem-sdk](https://github.com/loouislow81/golem-sdk) SDK to build linux desktop apps.
