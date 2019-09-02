@@ -1,6 +1,6 @@
 {
   "name": "golem-sdk",
-  "version": "2.0.62",
+  "version": "2.0.63",
   "description": "SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.",
   "author": "Loouis Low <loouis@gmail.com>",
   "license": "MIT",
