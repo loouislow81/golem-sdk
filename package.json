@@ -1,6 +1,6 @@
 {
   "name": "golem-sdk",
-  "version": "2.0.67",
+  "version": "2.0.69",
   "description": "SDK for GOLEM CLI and GOLEM App Store to craft Linux desktop apps.",
   "author": "Loouis Low <loouis@gmail.com>",
   "license": "MIT",
@@ -70,7 +70,6 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "del": "^3.0.0",
     "eslint": "^5.2.0",

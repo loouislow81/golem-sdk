@@ -1,4 +1,4 @@
-# golem-sdk 2.0.67
+# golem-sdk 2.0.69
 
 <p align="left">
   <img src="logo@ori.png" width="100">
