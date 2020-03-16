@@ -1,6 +1,21 @@
 # golem-sdk 2.0.70
 
 <p align="left">
+  <img src="https://badgen.net/github/release/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/releases/loouislow81/golem-sdksweep">
+  <img src="https://badgen.net/github/assets-dl/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/branches/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/forks/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/stars/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/watchers/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/tag/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/commits/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/last-commit/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/contributors/loouislow81/golem-sdk">
+  <img src="https://badgen.net/github/license/loouislow81/golem-sdk">
+</p>
+
+<p align="left">
   <img src="logo@ori.png" width="100">
 </p>
 
@@ -301,3 +316,7 @@ golem(options, (error, appPath) => {
 ```bash
 $ golem upgrade-all
 ```
+
+---
+
+[MIT](https://github.com/loouislow81/golem-sdk/blob/2.x.x/LICENSE)
